@@ -1524,6 +1524,7 @@ body.cmd .kh-harga input { color: #fbf3ea; }
 @media (max-width: 900px) { .fa-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 520px) { .fa-grid { grid-template-columns: 1fr; } }
 .fa-grid .gb-f input, .fa-grid .gb-f select { width: 100%; box-sizing: border-box; }
+.fa-grid .fa-span { grid-column: 1 / -1; }
 .fa-grid .gb-f input[readonly] { background: #f1f5f9; color: #334155; }
 .fa-dua { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 @media (max-width: 760px) { .fa-dua { grid-template-columns: 1fr; } }
@@ -6969,8 +6970,9 @@ body.dark #tabKpiCmo .kci-card.kci-tot,body.cmd #tabKpiCmo .kci-card.kci-tot{bac
         </div>
         <h3 class="fa-h3">Objek jaminan</h3>
         <div class="fa-grid">
-          <div class="gb-f"><label>Merk</label><select id="faMerk" onchange="faIsiTipe()"><option value="">memuat MRP&hellip;</option></select></div>
-          <div class="gb-f"><label>Type</label><select id="faTipe" onchange="faIsiTahun()"></select></div>
+          <div class="gb-f fa-span"><label>Cari type (langsung)</label><input id="faCari" placeholder="ketik mis. agya 1.2 g mt" oninput="faIsiTipe(true)" autocomplete="off"></div>
+          <div class="gb-f"><label>Merk</label><select id="faMerk" onchange="faEl('faCari').value='';faIsiTipe()"><option value="">memuat MRP&hellip;</option></select></div>
+          <div class="gb-f"><label>Type</label><select id="faTipe" onchange="faPilihTipe()"></select></div>
           <div class="gb-f"><label>Tahun</label><select id="faTahun" onchange="faHargaDariMrp()"></select></div>
           <div class="gb-f"><label>Warna</label><input id="faWarna"></div>
           <div class="gb-f"><label>No. rangka</label><input id="faRangka" style="text-transform:uppercase"></div>
@@ -19823,17 +19825,39 @@ function faIsiMerk() {
   if (lama) faEl('faMerk').value = lama;
   faIsiTipe();
 }
-function faIsiTipe() {
-  var m = faEl('faMerk').value, lama = faEl('faTipe').value;
-  var tipe = (ucData ? ucData.rows : []).filter(function (r) { return r.brand === m; }).map(function (r) { return r.tipe; });
-  tipe = tipe.filter(function (t, i) { return tipe.indexOf(t) === i; }).sort();
-  faEl('faTipe').innerHTML = '<option value="">- pilih type -</option>' + tipe.map(function (t) { return '<option>' + gbEsc(t) + '</option>'; }).join('');
-  if (lama && tipe.indexOf(lama) >= 0) faEl('faTipe').value = lama;
+/* Type = varian lengkap dari MRP (mis. "AGYA 1.2 G MT"), bisa langsung dicari tanpa pilih merk dulu */
+function faLabelTipe(r) {
+  var j = String(r.jenis || '').trim(), t = String(r.tipe || '').trim();
+  if (!j) return t;
+  return j.toUpperCase().indexOf(t.toUpperCase()) === 0 || !t ? j : t + ' ' + j;
+}
+function faIsiTipe(dariCari) {
+  var m = faEl('faMerk').value, cari = faTxt('faCari').toLowerCase(), sel = faEl('faTipe'), lama = sel.value;
+  var kata = cari ? cari.split(/\s+/) : [];
+  var daftar = [];
+  (ucData ? ucData.rows : []).forEach(function (r, i) {
+    if (!kata.length && m && r.brand !== m) return;
+    if (!kata.length && !m) return;
+    var teks = (r.brand + ' ' + r.tipe + ' ' + (r.jenis || '')).toLowerCase();
+    for (var k = 0; k < kata.length; k++) if (teks.indexOf(kata[k]) < 0) return;
+    daftar.push({ i: i, t: faLabelTipe(r) + (kata.length && !m ? '  (' + r.brand + ')' : '') });
+  });
+  daftar.sort(function (a, b) { return a.t < b.t ? -1 : 1; });
+  if (daftar.length > 300) daftar = daftar.slice(0, 300);
+  sel.innerHTML = '<option value="">' + (daftar.length ? '- pilih type (' + daftar.length + ') -' : (kata.length ? 'tidak ada yang cocok' : '- pilih merk / cari type -')) + '</option>' +
+    daftar.map(function (d) { return '<option value="' + d.i + '">' + gbEsc(d.t) + '</option>'; }).join('');
+  if (lama && daftar.some(function (d) { return String(d.i) === lama; })) sel.value = lama;
+  else if (dariCari && daftar.length === 1) sel.value = String(daftar[0].i);
+  faPilihTipe();
+}
+function faPilihTipe() {
+  var r = faBaris();
+  if (r && faEl('faMerk').value !== r.brand) faEl('faMerk').value = r.brand;
   faIsiTahun();
 }
 function faBaris() {
-  var m = faEl('faMerk').value, t = faEl('faTipe').value;
-  return (ucData ? ucData.rows : []).filter(function (r) { return r.brand === m && r.tipe === t; })[0] || null;
+  var i = parseInt(faEl('faTipe').value, 10);
+  return (ucData && !isNaN(i)) ? ucData.rows[i] || null : null;
 }
 function faIsiTahun() {
   var r = faBaris(), lama = faEl('faTahun').value;
@@ -19961,7 +19985,7 @@ function faData() {
   var ttd = FA_TTD.map(function (t, k) { return { judul: t[0], nama: g('faTtdN' + k), jabatan: g('faTtdJ' + k) }; });
   return {
     jenis: g('faJenis'), status: g('faStatus'), nama: g('faNama'), pekerjaan: g('faPekerjaan'), penghasilan: g('faPenghasilan'), sumber: g('faSumber'),
-    merk: g('faMerk'), tipe: g('faTipe'), tahun: g('faTahun'), warna: g('faWarna'), rangka: g('faRangka').toUpperCase(), mesin: g('faMesin').toUpperCase(),
+    merk: g('faMerk'), tipe: faBaris() ? faLabelTipe(faBaris()) : '', tahun: g('faTahun'), warna: g('faWarna'), rangka: g('faRangka').toUpperCase(), mesin: g('faMesin').toUpperCase(),
     nopol: g('faNopol').toUpperCase(), namaStnk: g('faNamaStnk'), berlakuStnk: faTgl(g('faBerlakuStnk')), berlakuPajak: faTgl(g('faBerlakuPajak')),
     bpkb: g('faBpkb').toUpperCase(), kwitansi: g('faKwitansi'), faktur: g('faFaktur'), srut: g('faSrut'),
     perbaikan: perbaikan, pajakDenda: faAngka(g('faPajakDenda')), swdkllj: faAngka(g('faSwdkllj')), biayaAdm: faAngka(g('faBiayaAdm')),
