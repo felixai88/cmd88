@@ -23,7 +23,7 @@
   var API_URL = "https://script.google.com/macros/s/AKfycbx7G9oWxfUrpJCrahFVcdACQQxdRCr7P7eiKKEA_VB4XEYPuC6pYh2wJMyI-jJ49DYLtQ/exec";
 
   /* fungsi server yang boleh dipanggil — harus sama dengan daftar di Api.gs */
-  var FUNGSI = ["loginUser", "cekSesi", "logoutUser", "gantiPassword", "daftarUser", "tambahUser", "resetPasswordUser", "ubahStatusUser", "fetchSheetCSV", "fetchJualanCSV", "fetchTarikanCSV", "fetchLapMeetingCSV", "fetchTarikanAllCSV", "fetchStockTahunan", "bacaSheetAman", "getPeriodeMrp", "getPeriodeMrpSorum", "getMrpSorumBekas", "getMatriksRangka", "bacaStnk", "bacaAppraisal", "catatVerifikasi", "fetchHargaAyda", "getDataPembiayaan", "bacaTacDealer", "ajukanPengajuanHarga", "ambilBerkasDrive", "fetchKelengkapanEstimasi", "fetchPengajuanHarga", "simpanBastLengkap", "simpanGabunganEstimasi", "simpanKeteranganEstimasi", "simpanMemoHarga", "simpanMemoMassal", "unggahBerkasEstimasi", "getDaftarCabang", "fetchKpiCmoList", "fetchKpiCmoDetail", "simpanAktivitas", "simpanProspek", "updateStatusProspek", "fetchAktivitasList", "fetchProspekList", "fetchKpiCmoRekap", "ttdAmbil", "ttdSimpan", "ttdSimpanPosisi", "ttdHapus", "simpanAppraisal"];
+  var FUNGSI = ["loginUser", "cekSesi", "logoutUser", "gantiPassword", "daftarUser", "tambahUser", "resetPasswordUser", "ubahStatusUser", "fetchSheetCSV", "fetchJualanCSV", "fetchTarikanCSV", "fetchLapMeetingCSV", "fetchTarikanAllCSV", "fetchStockTahunan", "bacaSheetAman", "getPeriodeMrp", "getPeriodeMrpSorum", "getMrpSorumBekas", "getMatriksRangka", "bacaStnk", "bacaAppraisal", "catatVerifikasi", "fetchHargaAyda", "getDataPembiayaan", "bacaTacDealer", "ajukanPengajuanHarga", "ambilBerkasDrive", "fetchKelengkapanEstimasi", "fetchPengajuanHarga", "simpanBastLengkap", "simpanGabunganEstimasi", "simpanKeteranganEstimasi", "simpanMemoHarga", "simpanMemoMassal", "unggahBerkasEstimasi", "getDaftarCabang", "fetchKpiCmoList", "fetchKpiCmoDetail", "simpanAktivitas", "simpanProspek", "updateStatusProspek", "fetchAktivitasList", "fetchProspekList", "fetchKpiCmoRekap", "ttdAmbil", "ttdSimpan", "ttdSimpanPosisi", "ttdHapus", "simpanAppraisal", "faNamaAmbil", "faNamaSimpan"];
 
   function panggil(nama, args, ok, gagal, obj) {
     fetch(API_URL, {
@@ -6960,7 +6960,7 @@ body.dark #tabKpiCmo .kci-card.kci-tot,body.cmd #tabKpiCmo .kci-card.kci-tot{bac
         <h2>1. Data nasabah &amp; unit</h2>
         <p class="gb-sub">Isi data, harga pasar otomatis dari database MRP. Hasilnya 1 PDF: form + pricing + tanda tangan (1 halaman), lampiran 9 foto, dan STNK depan-belakang.</p>
         <div class="fa-grid">
-          <div class="gb-f"><label>Jenis pengajuan</label><select id="faJenis" onchange="faHitung()"><option value="UC">Used Car (pembelian unit)</option><option value="DT">Dana Tunai</option></select></div>
+          <div class="gb-f"><label>Jenis pengajuan</label><select id="faJenis" onchange="faHitungAngsuran()"><option value="UC">Used Car (pembelian unit)</option><option value="DT">Dana Tunai</option></select></div>
           <div class="gb-f"><label>Status nasabah</label><select id="faStatus"><option>NEW</option><option>RO</option></select></div>
           <div class="gb-f"><label>Nama nasabah</label><input id="faNama" placeholder="nama sesuai KTP"></div>
           <div class="gb-f"><label>Pekerjaan</label><input id="faPekerjaan" placeholder="mis. Kebun kelapa sawit"></div>
@@ -6984,7 +6984,6 @@ body.dark #tabKpiCmo .kci-card.kci-tot,body.cmd #tabKpiCmo .kci-card.kci-tot{bac
           <div class="gb-f"><label>Faktur</label><select id="faFaktur"><option>Ada</option><option>Tidak Ada</option></select></div>
           <div class="gb-f"><label>S.R.U.T (unit 2019 ke atas)</label><select id="faSrut"><option>Ada</option><option>Tidak Ada</option><option>-</option></select></div>
         </div>
-        <div class="fa-baris-tombol"><button type="button" class="fa-btn" onclick="faDariSimulasi()">Isi dari simulasi Used Car terakhir</button><span class="gb-kecil" id="faInfoSim"></span></div>
       </div>
 
       <div class="card fa-card">
@@ -7018,12 +7017,12 @@ body.dark #tabKpiCmo .kci-card.kci-tot,body.cmd #tabKpiCmo .kci-card.kci-tot{bac
         <div class="fa-grid">
           <div class="gb-f"><label>Harga pasar</label><input class="fa-rp" id="faHargaPasar" inputmode="numeric" oninput="faKetikRp(this)"><div class="gb-kecil" id="faInfoMrp"></div></div>
           <div class="gb-f"><label>Biaya perbaikan kendaraan</label><input class="fa-rp" id="faBiayaPerbaikan" readonly><div class="gb-kecil">otomatis dari estimasi perbaikan + perpanjangan</div></div>
-          <div class="gb-f fa-uc"><label>DP / uang muka</label><input class="fa-rp" id="faDp" inputmode="numeric" oninput="faKetikRp(this)"><div class="gb-kecil" id="faInfoDp"></div></div>
-          <div class="gb-f fa-uc"><label>Metode DP</label><select id="faMetode" onchange="faHitung()"><option value="ADDB">ADDB</option><option value="ADDM">ADDM</option></select></div>
+          <div class="gb-f fa-uc"><label>DP / uang muka</label><input class="fa-rp" id="faDp" inputmode="numeric" oninput="faDpManual=!!this.value;faKetikRp(this);faHitungAngsuran()"><div class="gb-kecil" id="faInfoDp"></div></div>
+          <div class="gb-f fa-uc"><label>Metode DP</label><select id="faMetode" onchange="faHitungAngsuran()"><option value="ADDB">ADDB</option><option value="ADDM">ADDM</option></select></div>
           <div class="gb-f fa-dt"><label>Maks pinjaman (80% harga pasar)</label><input class="fa-rp" id="faMaksPinjam" readonly></div>
           <div class="gb-f fa-dt"><label>Pinjaman dimohon</label><input class="fa-rp" id="faPinjam" inputmode="numeric" oninput="faKetikRp(this)"><div class="gb-kecil" id="faInfoPinjam"></div></div>
-          <div class="gb-f"><label>Tenor (bulan)</label><input id="faTenor" inputmode="numeric" placeholder="mis. 60"></div>
-          <div class="gb-f"><label>Angsuran</label><input class="fa-rp" id="faAngsuran" inputmode="numeric" oninput="faKetikRp(this)"></div>
+          <div class="gb-f"><label>Tenor (bulan)</label><select id="faTenor" onchange="faHitungAngsuran()"><option value="12">12 bulan</option><option value="24">24 bulan</option><option value="36">36 bulan</option><option value="48">48 bulan</option><option value="60" selected>60 bulan</option></select></div>
+          <div class="gb-f"><label>Angsuran</label><input class="fa-rp" id="faAngsuran" inputmode="numeric" oninput="faKetikRp(this)"><div class="gb-kecil" id="faInfoAngs"></div></div>
           <div class="gb-f fa-uc"><label>Pelunasan dealer</label><input class="fa-rp" id="faPelunasan" inputmode="numeric" oninput="faKetikRp(this)"></div>
         </div>
       </div>
@@ -7043,7 +7042,7 @@ body.dark #tabKpiCmo .kci-card.kci-tot,body.cmd #tabKpiCmo .kci-card.kci-tot{bac
       </div>
 
       <div class="card fa-card">
-        <button type="button" class="gb-btn utama" id="faBtnPdf" onclick="faBuatPdf()">Buat PDF, Simpan ke Drive &amp; Unduh</button>
+        <button type="button" class="gb-btn utama" id="faBtnPdf" onclick="faBuatPdf()">Buat &amp; Unduh PDF</button>
         <div id="faPesan" class="gb-pesan"></div>
       </div>
     </div>
@@ -19709,7 +19708,7 @@ var FA_FOTO = ['Gesek Mesin', 'Gesek Rangka', 'Foto Sisi Depan', 'Foto Sisi Bela
 var FA_STNK = ['STNK - Depan', 'STNK - Belakang'];
 var FA_TTD = [['Diajukan Oleh', 'CMO'], ['Diperiksa Oleh', 'MH'], ['Disetujui Oleh', 'KC HEAD'],
   ['Komite Appraisal', 'Used Vehicle & Dana Tunai Marketing Supervisor'], ['Komite Appraisal', 'Direksi/GM/SPV Area']];
-var faKond = {}, faImg = {}, faSiap = false;
+var faKond = {}, faImg = {}, faSiap = false, faDpManual = false, faJedaAngs = null;
 
 function faEl(id) { return document.getElementById(id); }
 function faAngka(v) { return parseInt(String(v == null ? '' : v).replace(/[^0-9]/g, ''), 10) || 0; }
@@ -19735,13 +19734,15 @@ function faMulai() {
     /* perbaikan */
     for (var i = 0; i < 3; i++) faTambahPerbaikan();
     /* tanda tangan */
-    var simpan = {}; try { simpan = JSON.parse(localStorage.getItem('faTtdNama') || '{}') || {}; } catch (e) {}
+    var simpan = {}; try { simpan = JSON.parse(localStorage.getItem(faKunciNama()) || '{}') || {}; } catch (e) {}
     faEl('faTtd').innerHTML = FA_TTD.map(function (t, k) {
       var nama = simpan['n' + k] != null ? simpan['n' + k] : (k === 0 && typeof currentUser !== 'undefined' && currentUser ? currentUser.nama : '');
       var jab = simpan['j' + k] != null ? simpan['j' + k] : t[1];
       return '<div><small>' + gbEsc(t[0]) + '</small><input id="faTtdN' + k + '" placeholder="Nama" value="' + gbEsc(nama || '') + '">' +
         '<input id="faTtdJ' + k + '" placeholder="Jabatan" value="' + gbEsc(jab) + '"></div>';
     }).join('');
+    faEl('faTtd').querySelectorAll('input').forEach(function (el) { el.addEventListener('change', faSimpanNama); });
+    faAmbilNamaAkun();
     /* foto */
     var slot = function (daftar, pre) {
       return daftar.map(function (n, k) {
@@ -19760,6 +19761,35 @@ function faMulai() {
   faHitung();
 }
 
+/* nama penandatangan: disimpan di akun (server) + salinan di perangkat */
+function faKunciNama() { return 'faTtdNama|' + ((typeof currentUser !== 'undefined' && currentUser && currentUser.username) || ''); }
+function faTokenSesi() { try { return localStorage.getItem('cmdSesiToken') || ''; } catch (e) { return ''; } }
+function faAdaFn(fn) { return window.google && google.script && google.script.run && typeof google.script.run[fn] === 'function'; }
+function faNamaSekarang() {
+  var o = {}; FA_TTD.forEach(function (t, k) { o['n' + k] = faTxt('faTtdN' + k); o['j' + k] = faTxt('faTtdJ' + k); }); return o;
+}
+function faIsiNama(o) {
+  if (!o) return;
+  FA_TTD.forEach(function (t, k) {
+    if (o['n' + k] != null && o['n' + k] !== '' && faEl('faTtdN' + k)) faEl('faTtdN' + k).value = o['n' + k];
+    if (o['j' + k] != null && o['j' + k] !== '' && faEl('faTtdJ' + k)) faEl('faTtdJ' + k).value = o['j' + k];
+  });
+}
+var faJedaNama = null;
+function faSimpanNama() {
+  var o = faNamaSekarang();
+  try { localStorage.setItem(faKunciNama(), JSON.stringify(o)); } catch (e) {}
+  clearTimeout(faJedaNama);
+  faJedaNama = setTimeout(function () {
+    if (faAdaFn('faNamaSimpan')) google.script.run.withFailureHandler(function () {}).faNamaSimpan(faTokenSesi(), o);
+  }, 600);
+}
+function faAmbilNamaAkun() {
+  if (!faAdaFn('faNamaAmbil')) return;
+  google.script.run.withSuccessHandler(function (o) {
+    if (o && Object.keys(o).length) { faIsiNama(o); try { localStorage.setItem(faKunciNama(), JSON.stringify(faNamaSekarang())); } catch (e) {} }
+  }).withFailureHandler(function () {}).faNamaAmbil(faTokenSesi());
+}
 function faTogKondisi(el) {
   var k = faKond[el.dataset.n]; k.ada = !k.ada;
   el.classList.toggle('tdk', !k.ada);
@@ -19817,8 +19847,48 @@ function faHargaDariMrp() {
   if (!r || !th || !r.harga[th]) { info.innerHTML = ''; faHitung(); return; }
   var mrp = r.harga[th], otr = typeof ucBulatOtr === 'function' ? ucBulatOtr(+th, mrp) : mrp;
   faEl('faHargaPasar').value = faFmt(otr);
-  info.innerHTML = '&#10004; dari database MRP' + (typeof ucSumber !== 'undefined' && ucSumber ? ' (' + gbEsc(ucSumber) + ')' : '') + (r.kategori ? ' &middot; ' + gbEsc(r.kategori) : '');
+  info.innerHTML = '&#10004; OTR dari database MRP' + (typeof ucSumber !== 'undefined' && ucSumber ? ' (' + gbEsc(ucSumber) + ')' : '') + (r.kategori ? ' &middot; ' + gbEsc(r.kategori) : '');
+  faDpManual = false; faEl('faDp').value = '';
+  faHitungAngsuran();
+}
+/* Used Car: DP minimal sesuai ketentuan + angsuran & pelunasan dihitung LANGSUNG dengan mesin kalkulator Used Car
+   (unit, tahun, OTR dari pilihan di form ini — tidak tergantung simulasi terakhir) */
+function faHitungAngsuran() {
+  clearTimeout(faJedaAngs);
+  faJedaAngs = setTimeout(faHitungAngsuranSekarang, 250);
+}
+function faHitungAngsuranSekarang() {
   faHitung();
+  var infoA = faEl('faInfoAngs'); infoA.innerHTML = '';
+  if (faEl('faJenis').value !== 'UC') return;
+  var r = faBaris(), tahun = +faEl('faTahun').value, otr = faAngka(faTxt('faHargaPasar'));
+  if (!r || !tahun || !otr) return;
+  var umur = new Date().getFullYear() - tahun, mtd = faEl('faMetode').value.toLowerCase();
+  var minDp = typeof ucMinimalDp === 'function' ? ucMinimalDp(r.kategori, umur, 'LOKAL', mtd) : 0;
+  if (!faDpManual && minDp) faEl('faDp').value = faFmt(Math.ceil(otr * minDp / 1e6) * 1e6);
+  var dp = faAngka(faTxt('faDp'));
+  faHitung();
+  if (minDp && dp < otr * minDp - 1) {
+    infoA.innerHTML = '<b style="color:#b91c1c">DP di bawah ketentuan minimal ' + Math.round(minDp * 100) + '% (' + faRp(Math.ceil(otr * minDp)) + ')</b>';
+    faEl('faAngsuran').value = ''; faEl('faPelunasan').value = ''; return;
+  }
+  if (typeof UC_MESIN === 'undefined') return;
+  try {
+    var jenisUnit = /PICK\s*UP|PICKUP/i.test(r.objek || '') ? 'PU' : 'MB';
+    var inp = {
+      tahunIni: new Date().getFullYear(), tahunMobil: tahun, tenor: (+faEl('faTenor').value || 60) / 12, otr: otr, dp: dp,
+      arTh: faEl('ucAr') ? +faEl('ucAr').value || 0 : 0, jenis: jenisUnit, pemakaian: 'PRIBADI', wilayah: 'DK', plat: 'LOKAL',
+      rateAssCash: ucAngka('ucAssCash') / 100, rateAssJiwa: ucAngka('ucAssJiwa') / 100,
+      nilaiTjh: ucAngka('ucTjh') || 10000000, nilaiPaSupir: ucAngka('ucPaSupir') || 2500000, nilaiPaPnp: ucAngka('ucPaPnp') || 2500000,
+      adm: typeof ucBiayaAdmin === 'function' ? ucBiayaAdmin(jenisUnit) : ucAngka('ucAdm'), subsidiPaket: ucAngka('ucSubsidi'),
+      trfAkhirBulan: ucAngka('ucTrfM'), trfAkhirBulanB: ucAngka('ucTrfB')
+    };
+    var h = UC_MESIN.hitung(inp), a = h && h[mtd];
+    if (!h || h.error || !a || !a.angsuran) { infoA.innerHTML = '<span style="color:#a16207">' + gbEsc((h && h.error) || 'Tenor ini tidak tersedia untuk unit ini') + '. Isi manual atau ganti tenor.</span>'; faEl('faAngsuran').value = ''; faEl('faPelunasan').value = ''; return; }
+    faEl('faAngsuran').value = faFmt(Math.round(a.angsuran));
+    faEl('faPelunasan').value = faFmt(Math.round(a.pencairan));
+    infoA.innerHTML = '&#10004; dihitung otomatis (kalkulator Used Car, ' + mtd.toUpperCase() + ', ' + faEl('faTenor').value + ' bln, asuransi ' + (inp.arTh ? 'AR ' + inp.arTh + ' th + TLO' : 'TLO') + ')';
+  } catch (e) { infoA.innerHTML = 'Angsuran belum bisa dihitung otomatis: ' + gbEsc(e.message || e); }
 }
 function faDariSimulasi() {
   var u = typeof ucInfoUnit !== 'undefined' ? ucInfoUnit : null, h = typeof ucHasil !== 'undefined' ? ucHasil : null;
@@ -20069,7 +20139,7 @@ function faBuatPdf() {
   if (kurang.length) { faPesan('bahaya', 'Lengkapi dulu: ' + kurang.map(gbEsc).join(', ') + '.'); return; }
   var adaFoto = FA_FOTO.filter(function (n, i) { return faImg['f' + i]; }).length, adaStnk = faImg.s0 || faImg.s1;
   if ((!adaFoto || !adaStnk) && !confirm((!adaFoto ? 'Belum ada foto lampiran. ' : '') + (!adaStnk ? 'Foto STNK belum ada. ' : '') + 'Tetap buat PDF?')) return;
-  try { var simpan = {}; d.ttd.forEach(function (t, k) { simpan['n' + k] = t.nama; simpan['j' + k] = t.jabatan; }); localStorage.setItem('faTtdNama', JSON.stringify(simpan)); } catch (e) {}
+  faSimpanNama();
   var btn = faEl('faBtnPdf'); btn.disabled = true;
   faPesan('info', 'Menyusun PDF&hellip;');
   var kini = new Date();
@@ -20087,19 +20157,17 @@ function faBuatPdf() {
     btn.disabled = false;
     var ok = '&#10004; PDF terunduh: <b>' + gbEsc(namaFile) + '</b><br>ID verifikasi: <b>' + gbEsc(id) + '</b>';
     var adaServer = window.google && google.script && google.script.run && typeof google.script.run.simpanAppraisal === 'function';
-    if (!adaServer) { faPesan('hati', ok + '<br>Belum tersimpan ke Drive (fungsi simpanAppraisal belum dipasang).'); return; }
-    faPesan('sukses', ok + '<br>Menyimpan ke Google Drive&hellip;');
-    var b64 = doc.output('datauristring').split(',')[1];
+    /* PDF TIDAK dikirim ke Drive — hanya data ringkas + ID verifikasi dicatat di sheet LOG APPRAISAL (bukti keaslian stempel) */
+    if (!adaServer) { faPesan('sukses', ok); return; }
+    faPesan('sukses', ok + '<br>Mencatat ID verifikasi&hellip;');
     google.script.run
-      .withSuccessHandler(function (r) {
-        faPesan('sukses', ok + '<br>&#10004; Tersimpan di Drive &amp; tercatat di sheet LOG APPRAISAL' + (r && r.url ? ' &middot; <a href="' + gbEsc(r.url) + '" target="_blank" rel="noopener">buka file</a>' : '') + '.');
-      })
-      .withFailureHandler(function (e) { faPesan('hati', ok + '<br>Gagal menyimpan ke Drive: ' + gbEsc(e && e.message ? e.message : e) + '. PDF di perangkat tetap aman.'); })
+      .withSuccessHandler(function () { faPesan('sukses', ok + '<br>&#10004; ID verifikasi tercatat di sheet LOG APPRAISAL.'); })
+      .withFailureHandler(function (e) { faPesan('hati', ok + '<br>ID verifikasi belum tercatat: ' + gbEsc(e && e.message ? e.message : e) + '. PDF tetap aman di perangkat.'); })
       .simpanAppraisal({
         id: id, oleh: info.oleh, jenis: d.jenis === 'DT' ? 'Dana Tunai' : 'Used Car', nama: d.nama, nopol: d.nopol,
         unit: d.merk + ' ' + d.tipe, tahun: d.tahun, rangka: d.rangka, hargaPasar: d.hargaPasar,
         dp: d.dp, pinjaman: d.pinjam, tenor: d.tenor, angsuran: d.angsuran, namaFile: namaFile
-      }, b64);
+      }, '');
   }).catch(function (e) { btn.disabled = false; faPesan('bahaya', 'Gagal membuat PDF: ' + gbEsc(e && e.message ? e.message : e)); });
 }
 (function () { if (typeof JUDUL_TAB !== 'undefined') JUDUL_TAB.tabAppraisal = ['Form Appraisal', 'Isi form appraisal, lampiran foto & STNK, jadi 1 PDF terverifikasi']; })();
