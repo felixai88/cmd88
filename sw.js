@@ -4,7 +4,7 @@
 //   Kalau sedang offline / sinyal hilang, pakai salinan terakhir di HP.
 // - Library (Excel, PDF, grafik) dari CDN: disimpan sekali, tidak diunduh ulang.
 // - Data (Apps Script) TIDAK disimpan: selalu diambil langsung dari server.
-const CACHE = "toolscmd-v6";
+const CACHE = "toolscmd-v7";
 const CDN = ["cdnjs.cloudflare.com", "cdn.jsdelivr.net", "fonts.googleapis.com", "fonts.gstatic.com"];
 
 self.addEventListener("install", () => self.skipWaiting());
