@@ -1518,6 +1518,31 @@ body.cmd .kh-harga input { color: #fbf3ea; }
 .lipat-kepala.buka .lipat-btn { background: #0f2540; color: #fff; border-color: #0f2540; }
 .lipat-isi.tertutup { display: none; }
 /* ==================== GABUNG BERKAS ==================== */
+.gb-ttd { border: 1px solid #dbe3ee; border-radius: 12px; padding: 12px 14px; margin: 12px 0; background: #f8fafc; }
+.gb-ttd[hidden] { display: none !important; }
+.gb-ttd-atas { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.gb-ttd-atas b { font-size: 13px; color: #0f2540; }
+.gb-ttd-img { height: 46px; min-width: 90px; max-width: 180px; border: 1px dashed #c5cfdc; border-radius: 8px; background: #fff; display: grid; place-items: center; font-size: 11px; color: #94a3b8; overflow: hidden; }
+.gb-ttd-img img { max-height: 42px; max-width: 170px; }
+.gb-ttd-tombol { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.gb-ttd-tombol button, .gb-ttd-tombol label { border: 1px solid #cfd6e0; background: #fff; color: #0f2540; border-radius: 8px; padding: 7px 11px; font-size: 12px; font-weight: 800; cursor: pointer; position: relative; overflow: hidden; }
+.gb-ttd-tombol label input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.gb-ttd-tombol .utama { background: #0f2540; color: #fff; border-color: #0f2540; }
+.gb-ttd-cek { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 12.5px; font-weight: 700; color: #0f2540; }
+.gb-ttd-modal { position: fixed; inset: 0; z-index: 900; background: rgba(3,10,22,.62); display: flex; align-items: center; justify-content: center; padding: 12px; }
+.gb-ttd-modal[hidden] { display: none; }
+.gb-ttd-kotak { background: #fff; border-radius: 14px; width: min(760px, 100%); max-height: 96vh; display: flex; flex-direction: column; overflow: hidden; }
+.gb-ttd-kepala { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid #e5eaf0; flex-wrap: wrap; }
+.gb-ttd-kepala b { flex: 1; font-size: 13px; color: #0f2540; min-width: 140px; }
+.gb-ttd-kepala button { border: 1px solid #cfd6e0; background: #f7f9fb; border-radius: 8px; padding: 6px 10px; font-weight: 800; font-size: 12px; cursor: pointer; }
+.gb-ttd-kepala .utama { background: #1f7a4d; border-color: #1f7a4d; color: #fff; }
+.gb-ttd-badan { overflow: auto; padding: 10px; background: #e9eef4; flex: 1; }
+.gb-ttd-hal { position: relative; margin: 0 auto; width: fit-content; touch-action: none; cursor: crosshair; box-shadow: 0 4px 14px rgba(0,0,0,.18); }
+.gb-ttd-hal canvas { display: block; max-width: 100%; height: auto; }
+.gb-ttd-hal .gb-ttd-tanda { position: absolute; pointer-events: none; outline: 2px dashed #1f7a4d; background: rgba(31,122,77,.06); }
+.gb-ttd-hal .gb-ttd-tanda img { width: 100%; height: 100%; object-fit: contain; }
+.gb-ttd-kaki { padding: 8px 14px; font-size: 11.5px; color: #5b6b80; border-top: 1px solid #e5eaf0; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.gb-ttd-pad { background: #fff; border: 1px solid #cfd6e0; border-radius: 10px; touch-action: none; width: 100%; max-width: 640px; height: auto; cursor: crosshair; display: block; margin: 0 auto; }
 #tabGabungBerkas .gb-card h2 { margin-bottom: 4px; }
 .gb-sub { font-size: 12.5px; color: #5b6b80; margin: 0 0 14px; max-width: 70ch; }
 .gb-kecil { font-size: 11.5px; color: #8b98a8; margin: 8px 0 0; }
@@ -6844,6 +6869,36 @@ body.dark #tabKpiCmo .kci-card.kci-tot,body.cmd #tabKpiCmo .kci-card.kci-tot{bac
         <div id="gbDiagApr" class="gb-diag"></div>
         <div class="gb-tabel-wrap"><table class="gb-tabel" id="gbTabel"></table></div>
         <div id="gbRingkas" class="gb-ringkas"></div>
+        <div class="gb-ttd" id="gbTtdPanel" hidden>
+          <div class="gb-ttd-atas">
+            <div class="gb-ttd-img" id="gbTtdPratinjau">belum ada</div>
+            <div><b>Tanda tangan saya (HO)</b><div class="gb-kecil" style="margin-top:2px" id="gbTtdStatus">Simpan tanda tangan sekali, lalu bubuhkan ke kolom yang masih kosong di PDF appraiser.</div></div>
+          </div>
+          <div class="gb-ttd-tombol">
+            <label>Unggah foto TTD<input type="file" accept="image/*" onchange="gbTtdUnggah(this)"></label>
+            <button type="button" onclick="gbTtdBukaPad()">Tulis TTD</button>
+            <button type="button" onclick="gbTtdHapus()">Hapus TTD</button>
+            <button type="button" class="utama" onclick="gbTtdBukaPosisi()">Atur posisi di PDF</button>
+          </div>
+          <label class="gb-ttd-cek"><input type="checkbox" id="gbTtdPakai" onchange="gbTtdSegarkan()"> Bubuhkan tanda tangan saya saat menggabung</label>
+        </div>
+        <div class="gb-ttd-modal" id="gbTtdModal" hidden>
+          <div class="gb-ttd-kotak">
+            <div class="gb-ttd-kepala">
+              <b id="gbTtdJudul">Klik / sentuh kolom tanda tangan yang kosong</b>
+              <button type="button" onclick="gbTtdGeserHal(-1)">&#9664;</button>
+              <span id="gbTtdHalTeks" style="font-size:12px;font-weight:800"></span>
+              <button type="button" onclick="gbTtdGeserHal(1)">&#9654;</button>
+              <button type="button" class="utama" onclick="gbTtdSimpanPosisi()">Simpan</button>
+              <button type="button" onclick="gbTtdTutup()">Batal</button>
+            </div>
+            <div class="gb-ttd-badan" id="gbTtdBadan"></div>
+            <div class="gb-ttd-kaki" id="gbTtdKaki">
+              <span>Ukuran</span><input type="range" id="gbTtdUkuran" min="6" max="40" value="16" oninput="gbTtdGambarTanda()">
+              <span>Posisi diingat untuk berkas berikutnya (form dengan jumlah halaman sama).</span>
+            </div>
+          </div>
+        </div>
         <button type="button" class="gb-btn utama" id="gbBtnGabung" onclick="gbGabung()" disabled>Gabungkan &amp; Unduh PDF</button>
         <p class="gb-kecil" id="gbInfoJenis">Urutan file: Appraiser &rarr; STNK &rarr; Simulasi.</p>
       </div>
@@ -18297,6 +18352,7 @@ function gbKetikAngka(el) { var n = gbAngka(el.value); el.value = n ? n.toLocale
 function gbPilih(k, input) {
   var f = input.files && input.files[0];
   gbFile[k] = f || null;
+  if (k === 'apr') gbTtdJmlHal = 0;
   var map = { apr: ['gbNamaApr', 'gbSlotApr'], stnk: ['gbNamaStnk', 'gbSlotStnk'], sim: ['gbNamaSim', 'gbSlotSim'] }[k];
   if (f) { gbEl(map[0]).innerText = f.name; gbEl(map[1]).classList.add('terisi'); if (k !== 'sim') { gbSiapkanOcr(); gbPraBaca(k, f); } }
 }
@@ -18641,6 +18697,33 @@ function gbUrutanHal(jenis, n) {
   var depan = simpan.filter(function (x) { return dasar.indexOf(x) >= 0; });
   return depan.concat(dasar.filter(function (x) { return depan.indexOf(x) < 0; }));
 }
+/* bagian halaman (pita atas-bawah, dalam pecahan tinggi halaman) yang berisi label & angka */
+function gbRoiAmbil(jenis, n) { try { return (JSON.parse(localStorage.getItem('cmdOcrRoi') || '{}') || {})[jenis + '|' + n] || {}; } catch (e) { return {}; } }
+function gbRoiSimpan(jenis, n, roi) {
+  if (!roi || !Object.keys(roi).length) return;
+  try { var o = JSON.parse(localStorage.getItem('cmdOcrRoi') || '{}') || {}; o[jenis + '|' + n] = roi; localStorage.setItem('cmdOcrRoi', JSON.stringify(o)); } catch (e) {}
+}
+function gbRoiDari(baris, hal, tinggi) {
+  var y0 = Infinity, y1 = -Infinity;
+  var rk = hal.rangka ? String(hal.rangka).replace(/\s/g, '') : '';
+  baris.forEach(function (row) {
+    var t = row.map(function (z) { return z.t; }).join(' ');
+    var kena = GB_LABEL_UANG.test(t) || GB_LABEL_RANGKA.test(t) || (rk && t.replace(/\s/g, '').indexOf(rk) >= 0);
+    if (!kena) return;
+    row.forEach(function (z) { y0 = Math.min(y0, z.y); y1 = Math.max(y1, z.y + z.h); });
+  });
+  if (!isFinite(y0) || !tinggi) return null;
+  var a = Math.max(0, y0 / tinggi - 0.04), b = Math.min(1, y1 / tinggi + 0.06);
+  if (b - a < 0.12) { var m = (a + b) / 2; a = Math.max(0, m - 0.06); b = Math.min(1, m + 0.06); }
+  return [Math.round(a * 1000) / 1000, Math.round(b * 1000) / 1000];
+}
+function gbPotongKanvas(c, a, b) {
+  var y = Math.floor(c.height * a), h = Math.max(32, Math.ceil(c.height * (b - a)));
+  var k = document.createElement('canvas'); k.width = c.width; k.height = h;
+  var x = k.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, k.width, h);
+  x.drawImage(c, 0, y, c.width, h, 0, 0, c.width, h);
+  return k;
+}
 function gbIngatHal(jenis, n, hal) {
   if (!hal || !hal.length) return;
   try { var o = JSON.parse(localStorage.getItem('cmdOcrHal') || '{}') || {}; o[jenis + '|' + n] = hal; localStorage.setItem('cmdOcrHal', JSON.stringify(o)); } catch (e) {}
@@ -18707,6 +18790,7 @@ function gbOcrDokumen(file, jenis, lapor, senyap) {
       if (jumlahHuruf >= 300) throw gagalOcr(gTeks, 'PDF ini berisi teks tetapi label ' + nama + ' tidak dikenali');
       bagian = [];
       var urutan = gbUrutanHal(jenis, n), t0 = performance.now(), berguna = [], dihemat = [], kanvas = {};
+      var roiLama = gbRoiAmbil(jenis, n), roiBaru = {};
       function siapkan(no) { if (no && !kanvas[no]) kanvas[no] = gbKanvasHalaman(pdf, no); return kanvas[no]; }
       function bacaHal(no, hemat) {
         var sebelum = P.gabung(bagian);
@@ -18729,16 +18813,32 @@ function gbOcrDokumen(file, jenis, lapor, senyap) {
           return !masih;
         };
         var opsi = jenis === 'stnk' ? { pilih: gbPilihStnk } : { pilih: gbPilihApr(function () { return perlu(sebelum); }) };
+        function sumbang(hal) { return Object.keys(hal).some(function (k) { return hal[k] && !sebelum[k]; }); }
+        function selesai(hal) {
+          if (berguna.indexOf(no) < 0) berguna.push(no);
+          bagian.push(hal);
+          return penuh(P.gabung(bagian));
+        }
         return siapkan(no).then(function (c) {
           var idx = urutan.indexOf(no);
           siapkan(urutan[idx + 1]);                      /* render halaman berikutnya selagi halaman ini di-OCR */
-          return O.baca(c, info, cek, opsi);
-        }).then(function (r) {
-          var hal = urai(r.baris), adaBaru = Object.keys(hal).some(function (k) { return hal[k] && !sebelum[k]; });
-          if (adaBaru && berguna.indexOf(no) < 0) berguna.push(no);
-          if (berhentiHemat) dihemat.push(no);
-          bagian.push(hal);
-          return penuh(P.gabung(bagian));
+          /* PALING CEPAT: bagian halaman yang dulu berisi data sudah diingat -> OCR potongan itu saja */
+          var pot = hemat && jenis === 'apr' ? roiLama[no] : null;
+          var coba = pot ? O.baca(gbPotongKanvas(c, pot[0], pot[1]), info, cek, opsi).then(function (r) {
+            var hal = urai(r.baris);
+            if (sumbang(hal)) { roiBaru[no] = pot; return { selesai: selesai(hal) }; }
+            berhentiHemat = false; return null;          /* potongan meleset (form beda) -> baca halaman penuh */
+          }).catch(function () { return null; }) : Promise.resolve(null);
+          return coba.then(function (x) {
+            if (x) return x.selesai;
+            return O.baca(c, info, cek, opsi).then(function (r) {
+              var hal = urai(r.baris);
+              if (berhentiHemat) dihemat.push(no);
+              if (!sumbang(hal)) { bagian.push(hal); return penuh(P.gabung(bagian)); }
+              if (jenis === 'apr' && !r.putaran) { var b = gbRoiDari(r.baris, hal, c.height); if (b) roiBaru[no] = b; }
+              return selesai(hal);
+            });
+          });
         });
       }
       var ke = 0;
@@ -18753,6 +18853,7 @@ function gbOcrDokumen(file, jenis, lapor, senyap) {
         var g = P.gabung(bagian);
         if (lengkap(g)) {
           gbIngatHal(jenis, n, berguna);
+          gbRoiSimpan(jenis, n, roiBaru);
           return { data: g, sumber: 'OCR ' + ((performance.now() - t0) / 1000).toFixed(1) + ' dtk, hal. ' + berguna.join('+') + gbSufPekerja() };
         }
         throw gagalOcr(g);
@@ -18854,6 +18955,7 @@ function gbBaca() {
     isiAngka('gbPinjamMohon', gbData.apr.pinjamanDimohon);
     gbGambarTabel();
     gbEl('gbHasilKartu').hidden = false;
+    gbTtdSegarkan();
     var dg = gbEl('gbDiagApr'), m = gbData.aprMentah;
     if (gbData.aprGagal) { dg.className = 'gb-diag bad'; dg.innerHTML = '&#10006; Appraiser gagal dibaca AI: ' + gbEsc(gbData.aprGagal); }
     else if (gbData.aprCaraLama) { dg.className = 'gb-diag bad'; dg.innerHTML = '&#10006; Harga &amp; pinjaman appraiser tidak dibaca otomatis karena ' + gbEsc(gbData.aprAlasan) + '. Ketik manual di kolom Appraiser, atau pasang BacaAppraisal.gs + Api.gs lalu deploy New version.'; }
@@ -19087,6 +19189,7 @@ function gbLembarVerifikasi(keluar, info, font, tebal) {
   tulis('ID verifikasi', info.id);
   tulis('Waktu cek', info.waktu);
   tulis('Dicek oleh', info.oleh);
+  if (info.ttd) tulis('Tanda tangan HO', 'dibubuhkan oleh ' + info.oleh + ' (appraiser hal ' + info.ttd.hal + ')');
   tulis('Jenis', info.jenis);
   tulis('Unit', info.unit);
   tulis('No polisi / nama', [info.nopol, info.nama].filter(Boolean).join(' - '));
@@ -19117,9 +19220,191 @@ function gbCapHalaman(keluar, info, font, tebal) {
   var hal = keluar.getPages(), n = hal.length;
   hal.forEach(function (p, i) {
     var sz = p.getSize(), w = 232, h = 30, x = sz.width - w - 12, y = 10;
+    /* jangan menutupi tanda tangan HO: pindah ke pojok atas kalau bertabrakan (lembar verifikasi = hal 1, jadi appraiser bergeser +1) */
+    var t = info.ttd && (i === info.ttd.hal) ? info.ttd.kotak : null;
+    if (t && t.x < x + w && t.x + t.w > x && t.y < y + h && t.y + t.h > y) y = sz.height - h - 10;
     p.drawRectangle({ x: x, y: y, width: w, height: h, color: PDFLib.rgb(1, 1, 1), opacity: 0.88, borderColor: hijau, borderWidth: 1.2 });
     p.drawText('TERVERIFIKASI SISTEM TOOLS CMD  -  ' + info.id, { x: x + 7, y: y + 18, size: 7.5, font: tebal, color: hijau });
     p.drawText(gbAscii(info.waktu + '  -  ' + info.oleh).slice(0, 62) + '  -  hal ' + (i + 1) + '/' + n, { x: x + 7, y: y + 7, size: 6.5, font: font, color: PDFLib.rgb(0.3, 0.35, 0.42) });
+  });
+}
+
+/* =====================================================================
+   TANDA TANGAN HO
+   - tanda tangan disimpan di perangkat ini saja (localStorage), tidak dikirim ke server
+   - foto TTD di kertas putih otomatis dibuat transparan & dipotong rapi
+   - posisi (halaman + titik tengah + lebar, dalam pecahan ukuran halaman) diingat per jumlah halaman appraiser
+   ===================================================================== */
+var GB_TTD_KUNCI = 'cmdTtdHo';
+function gbTtdBoleh() { return typeof currentLoginRole !== 'undefined' && String(currentLoginRole).toUpperCase() === 'HO'; }
+function gbTtdAmbil() { try { return localStorage.getItem(GB_TTD_KUNCI) || ''; } catch (e) { return ''; } }
+function gbTtdPosAmbil(n) { try { return (JSON.parse(localStorage.getItem('cmdTtdPos') || '{}') || {})[n] || null; } catch (e) { return null; } }
+function gbTtdPosSimpan(n, pos) { try { var o = JSON.parse(localStorage.getItem('cmdTtdPos') || '{}') || {}; o[n] = pos; localStorage.setItem('cmdTtdPos', JSON.stringify(o)); } catch (e) {} }
+var gbTtdJmlHal = 0;
+function gbTtdSegarkan() {
+  var panel = gbEl('gbTtdPanel'); if (!panel) return;
+  panel.hidden = !gbTtdBoleh();
+  if (panel.hidden) return;
+  var ttd = gbTtdAmbil(), pra = gbEl('gbTtdPratinjau'), st = gbEl('gbTtdStatus'), cek = gbEl('gbTtdPakai');
+  pra.innerHTML = ttd ? '<img alt="TTD" src="' + ttd + '">' : 'belum ada';
+  if (!ttd) { cek.checked = false; cek.disabled = true; st.innerHTML = 'Belum ada tanda tangan. Unggah foto TTD (tanda tangan di kertas putih) atau tulis langsung.'; return; }
+  cek.disabled = false;
+  if (!gbFile.apr || !gbIsPdf(gbFile.apr)) { st.innerHTML = 'Tanda tangan hanya bisa dibubuhkan kalau berkas appraiser berupa PDF.'; cek.checked = false; cek.disabled = true; return; }
+  var hitung = gbTtdJmlHal ? Promise.resolve(gbTtdJmlHal) : gbBukaPdf(gbFile.apr).then(function (pdf) { gbTtdJmlHal = pdf.numPages; return pdf.numPages; });
+  hitung.then(function (n) {
+    var pos = gbTtdPosAmbil(n);
+    st.innerHTML = pos ? '&#10004; Posisi tersimpan: halaman ' + pos.hal + ' dari ' + n + '. Cek / ubah lewat <b>Atur posisi</b>.'
+                       : 'Posisi belum diatur. Klik <b>Atur posisi di PDF</b>, lalu sentuh kolom tanda tangan yang kosong.';
+    if (cek.checked && !pos) { cek.checked = false; gbTtdBukaPosisi(); }
+  }).catch(function () {});
+}
+/* gambar (foto / coretan) -> PNG transparan, dipotong ke goresan tinta */
+function gbTtdBersihkan(src, w, h) {
+  var sk = Math.min(1, 900 / Math.max(w, h));
+  var W = Math.max(1, Math.round(w * sk)), H = Math.max(1, Math.round(h * sk));
+  var c = document.createElement('canvas'); c.width = W; c.height = H;
+  var x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, W, H); x.drawImage(src, 0, 0, W, H);
+  var d = x.getImageData(0, 0, W, H), p = d.data, i, terang = [];
+  for (i = 0; i < p.length; i += 4 * 7) terang.push(0.299 * p[i] + 0.587 * p[i + 1] + 0.114 * p[i + 2]);
+  terang.sort(function (a, b) { return a - b; });
+  var kertas = terang[Math.floor(terang.length * 0.6)] || 230;           /* kecerahan kertas (mayoritas piksel) */
+  var batas = kertas - 45, x0 = W, y0 = H, x1 = -1, y1 = -1;
+  for (var y = 0; y < H; y++) for (var xx = 0; xx < W; xx++) {
+    i = (y * W + xx) * 4;
+    var L = 0.299 * p[i] + 0.587 * p[i + 1] + 0.114 * p[i + 2];
+    var a = L >= batas ? 0 : Math.min(255, Math.round((batas - L) / Math.max(20, batas - 40) * 255 * 1.6));
+    p[i + 3] = a;
+    if (a > 40) { if (xx < x0) x0 = xx; if (xx > x1) x1 = xx; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+  }
+  if (x1 < 0) throw new Error('Tanda tangan tidak terlihat. Foto tanda tangan dengan tinta gelap di kertas putih.');
+  x.putImageData(d, 0, 0);
+  var m = 6; x0 = Math.max(0, x0 - m); y0 = Math.max(0, y0 - m); x1 = Math.min(W - 1, x1 + m); y1 = Math.min(H - 1, y1 + m);
+  var k = document.createElement('canvas'); k.width = x1 - x0 + 1; k.height = y1 - y0 + 1;
+  k.getContext('2d').drawImage(c, x0, y0, k.width, k.height, 0, 0, k.width, k.height);
+  return k.toDataURL('image/png');
+}
+function gbTtdSimpan(url) {
+  try { localStorage.setItem(GB_TTD_KUNCI, url); } catch (e) { gbPesan('bahaya', 'Tanda tangan gagal disimpan di perangkat ini (memori browser penuh / mode penyamaran).'); return false; }
+  var cek = gbEl('gbTtdPakai'); if (cek) cek.checked = true;
+  gbTtdSegarkan(); return true;
+}
+function gbTtdUnggah(inp) {
+  var f = inp.files && inp.files[0]; inp.value = ''; if (!f) return;
+  gbKanvasGambar(f, 1400).then(function (c) {
+    try { gbTtdSimpan(gbTtdBersihkan(c, c.width, c.height)); } catch (e) { gbPesan('hati', gbEsc(e.message)); }
+  }).catch(function (e) { gbPesan('bahaya', 'Foto tanda tangan tidak bisa dibuka: ' + gbEsc(e.message || e)); });
+}
+function gbTtdHapus() {
+  if (!gbTtdAmbil()) return;
+  if (!confirm('Hapus tanda tangan yang tersimpan di perangkat ini?')) return;
+  try { localStorage.removeItem(GB_TTD_KUNCI); } catch (e) {}
+  gbTtdSegarkan();
+}
+/* --- tulis TTD langsung (mouse / jari) --- */
+function gbTtdBukaPad() {
+  var modal = gbEl('gbTtdModal'); modal.hidden = false; modal.setAttribute('data-mode', 'pad');
+  gbEl('gbTtdJudul').innerText = 'Tulis tanda tangan di kotak putih';
+  gbEl('gbTtdHalTeks').innerText = '';
+  modal.querySelectorAll('.gb-ttd-kepala button').forEach(function (b, i) { if (i < 2) b.style.display = 'none'; });
+  gbEl('gbTtdKaki').innerHTML = '<button type="button" onclick="gbTtdPadBersih()" style="border:1px solid #cfd6e0;background:#fff;border-radius:8px;padding:6px 10px;font-weight:800;font-size:12px;cursor:pointer">Ulangi</button><span>Tulis yang besar dan jelas. Setelah selesai klik Simpan.</span>';
+  var c = document.createElement('canvas'); c.width = 900; c.height = 320; c.className = 'gb-ttd-pad'; c.id = 'gbTtdPad';
+  var badan = gbEl('gbTtdBadan'); badan.innerHTML = ''; badan.appendChild(c);
+  var x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height);
+  x.lineWidth = 6; x.lineCap = 'round'; x.lineJoin = 'round'; x.strokeStyle = '#0b1f4a';
+  var turun = false, ada = false;
+  function titik(e) { var r = c.getBoundingClientRect(); return [(e.clientX - r.left) * c.width / r.width, (e.clientY - r.top) * c.height / r.height]; }
+  c.onpointerdown = function (e) { turun = true; ada = true; c.setPointerCapture(e.pointerId); var t = titik(e); x.beginPath(); x.moveTo(t[0], t[1]); x.lineTo(t[0] + 0.1, t[1]); x.stroke(); };
+  c.onpointermove = function (e) { if (!turun) return; var t = titik(e); x.lineTo(t[0], t[1]); x.stroke(); };
+  c.onpointerup = c.onpointercancel = function () { turun = false; };
+  c._ada = function () { return ada; };
+}
+function gbTtdPadBersih() { var c = gbEl('gbTtdPad'); if (!c) return; gbTtdBukaPad(); }
+/* --- atur posisi di halaman appraiser --- */
+var gbTtdSesi = null;
+function gbTtdBukaPosisi() {
+  if (!gbTtdAmbil()) { gbPesan('hati', 'Simpan tanda tangan dulu (Unggah foto TTD / Tulis TTD).'); return; }
+  if (!gbFile.apr || !gbIsPdf(gbFile.apr)) { gbPesan('hati', 'Tanda tangan hanya bisa dibubuhkan ke appraiser berbentuk PDF.'); return; }
+  var modal = gbEl('gbTtdModal'); modal.hidden = false; modal.setAttribute('data-mode', 'posisi');
+  modal.querySelectorAll('.gb-ttd-kepala button').forEach(function (b) { b.style.display = ''; });
+  gbEl('gbTtdJudul').innerText = 'Sentuh kolom tanda tangan yang kosong';
+  gbEl('gbTtdKaki').innerHTML = '<span>Ukuran</span><input type="range" id="gbTtdUkuran" min="6" max="40" value="16" oninput="gbTtdGambarTanda()"><span>Posisi diingat untuk berkas berikutnya.</span>';
+  gbEl('gbTtdBadan').innerHTML = '<div class="gb-kecil" style="text-align:center;padding:30px">Membuka PDF&hellip;</div>';
+  gbBukaPdf(gbFile.apr).then(function (pdf) {
+    var n = pdf.numPages, lama = gbTtdPosAmbil(n);
+    gbTtdJmlHal = n;
+    gbTtdSesi = { pdf: pdf, n: n, pos: lama ? Object.assign({}, lama) : { hal: Math.min(2, n), x: 0, y: 0, w: 0.16 } };
+    if (!lama) gbTtdSesi.baru = true;
+    gbEl('gbTtdUkuran').value = Math.round(gbTtdSesi.pos.w * 100);
+    gbTtdTampilHal();
+  }).catch(function (e) { gbEl('gbTtdBadan').innerHTML = '<div class="gb-kecil" style="padding:20px">PDF tidak bisa dibuka: ' + gbEsc(e.message || e) + '</div>'; });
+}
+function gbTtdTampilHal() {
+  var S = gbTtdSesi; if (!S) return;
+  gbEl('gbTtdHalTeks').innerText = 'hal ' + S.pos.hal + '/' + S.n;
+  gbKanvasHalaman(S.pdf, S.pos.hal, 1300).then(function (c) {
+    var bungkus = document.createElement('div'); bungkus.className = 'gb-ttd-hal';
+    bungkus.appendChild(c);
+    var tanda = document.createElement('div'); tanda.className = 'gb-ttd-tanda'; tanda.innerHTML = '<img alt="" src="' + gbTtdAmbil() + '">';
+    bungkus.appendChild(tanda);
+    var badan = gbEl('gbTtdBadan'); badan.innerHTML = ''; badan.appendChild(bungkus);
+    var geser = false;
+    function taruh(e) {
+      var r = c.getBoundingClientRect();
+      S.pos.x = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+      S.pos.y = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height));
+      S.ditaruh = true; gbTtdGambarTanda();
+    }
+    bungkus.onpointerdown = function (e) { geser = true; bungkus.setPointerCapture(e.pointerId); taruh(e); };
+    bungkus.onpointermove = function (e) { if (geser) taruh(e); };
+    bungkus.onpointerup = bungkus.onpointercancel = function () { geser = false; };
+    gbTtdGambarTanda();
+    if (S.pos.x) { var bd = gbEl('gbTtdBadan'); setTimeout(function () { bd.scrollTop = Math.max(0, S.pos.y * c.getBoundingClientRect().height - bd.clientHeight / 2); }, 30); }
+  });
+}
+function gbTtdGambarTanda() {
+  var S = gbTtdSesi, badan = gbEl('gbTtdBadan'); if (!S || !badan) return;
+  var c = badan.querySelector('canvas'), t = badan.querySelector('.gb-ttd-tanda'); if (!c || !t) return;
+  var uk = gbEl('gbTtdUkuran'); if (uk) S.pos.w = (+uk.value || 16) / 100;
+  if (!S.pos.x && !S.pos.y) { t.style.display = 'none'; return; }
+  var img = new Image(); img.src = gbTtdAmbil();
+  var rasio = img.naturalWidth ? img.naturalHeight / img.naturalWidth : 0.4;
+  var W = c.clientWidth || c.width, H = c.clientHeight || c.height;
+  var w = S.pos.w * W, h = w * rasio;
+  t.style.display = ''; t.style.width = w + 'px'; t.style.height = h + 'px';
+  t.style.left = (S.pos.x * W - w / 2) + 'px'; t.style.top = (S.pos.y * H - h / 2) + 'px';
+}
+function gbTtdGeserHal(d) {
+  var S = gbTtdSesi; if (!S) return;
+  var baru = Math.min(S.n, Math.max(1, S.pos.hal + d)); if (baru === S.pos.hal) return;
+  S.pos.hal = baru; S.pos.x = 0; S.pos.y = 0; gbTtdTampilHal();
+}
+function gbTtdSimpanPosisi() {
+  var modal = gbEl('gbTtdModal');
+  if (modal.getAttribute('data-mode') === 'pad') {
+    var c = gbEl('gbTtdPad');
+    if (!c || !c._ada || !c._ada()) { alert('Tulis tanda tangan dulu di kotak putih.'); return; }
+    try { if (gbTtdSimpan(gbTtdBersihkan(c, c.width, c.height))) gbTtdTutup(); } catch (e) { alert(e.message); }
+    return;
+  }
+  var S = gbTtdSesi; if (!S) return;
+  if (!S.pos.x && !S.pos.y) { alert('Sentuh dulu kolom tanda tangan yang kosong di halaman PDF.'); return; }
+  gbTtdPosSimpan(S.n, { hal: S.pos.hal, x: +S.pos.x.toFixed(4), y: +S.pos.y.toFixed(4), w: +S.pos.w.toFixed(3) });
+  var cek = gbEl('gbTtdPakai'); if (cek) cek.checked = true;
+  gbTtdTutup(); gbTtdSegarkan();
+}
+function gbTtdTutup() { var m = gbEl('gbTtdModal'); if (m) m.hidden = true; gbTtdSesi = null; gbEl('gbTtdBadan').innerHTML = ''; }
+/* dipanggil saat menggabung: tempel TTD ke halaman appraiser (halaman appraiser = halaman awal dokumen gabungan) */
+function gbTtdTempel(keluar, info) {
+  var cek = gbEl('gbTtdPakai');
+  if (!gbTtdBoleh() || !cek || !cek.checked || !gbIsPdf(gbFile.apr)) return Promise.resolve();
+  var ttd = gbTtdAmbil(), pos = gbTtdPosAmbil(gbTtdJmlHal);
+  if (!ttd || !pos) return Promise.resolve();
+  return keluar.embedPng(ttd).then(function (img) {
+    var hal = keluar.getPages()[pos.hal - 1]; if (!hal) return;
+    var sz = hal.getSize(), w = pos.w * sz.width, h = w * img.height / img.width;
+    var x = pos.x * sz.width - w / 2, y = sz.height - pos.y * sz.height - h / 2;
+    hal.drawImage(img, { x: x, y: y, width: w, height: h });
+    info.ttd = { hal: pos.hal, kotak: { x: x, y: y, w: w, h: h } };
   });
 }
 
@@ -19145,6 +19430,7 @@ function gbGabung() {
     return PDFLib.PDFDocument.create();
   }).then(function (keluar) {
     return gbTambahBerkas(keluar, gbFile.apr)
+      .then(function () { return gbTtdTempel(keluar, info); })
       .then(function () { return gbTambahBerkas(keluar, gbFile.stnk); })
       .then(function () { return gbTambahBerkas(keluar, gbFile.sim); })
       .then(function () { return Promise.all([keluar.embedFont(PDFLib.StandardFonts.Helvetica), keluar.embedFont(PDFLib.StandardFonts.HelveticaBold)]); })
@@ -19181,7 +19467,8 @@ function gbGabung() {
         pajak: '',
         pinjaman: gbAngka(val('gb_pinjam_sim')), hargaPasar: gbAngka(val('gb_harga_apr')), mrp: gbAngka(val('gb_harga_sim')),
         hasil: info.cek.some(function (c) { return c.status === 'CATATAN'; }) ? 'LOLOS DENGAN CATATAN' : 'LOLOS',
-        catatan: info.cek.filter(function (c) { return c.status !== 'LOLOS'; }).map(function (c) { return c.label + ': ' + c.ket; }).join('; '),
+        catatan: info.cek.filter(function (c) { return c.status !== 'LOLOS'; }).map(function (c) { return c.label + ': ' + c.ket; })
+          .concat(info.ttd ? ['TTD HO dibubuhkan (appraiser hal ' + info.ttd.hal + ')'] : []).join('; '),
         hashApr: info.hashApr, hashStnk: info.hashStnk, hashSim: info.hashSim
       });
   }).catch(function (e) {
