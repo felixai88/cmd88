@@ -1525,6 +1525,17 @@ body.cmd .kh-harga input { color: #fbf3ea; }
 @media (max-width: 520px) { .fa-grid { grid-template-columns: 1fr; } }
 .fa-grid .gb-f input, .fa-grid .gb-f select { width: 100%; box-sizing: border-box; }
 .fa-grid .fa-span { grid-column: 1 / -1; }
+.fa-combo { position: relative; }
+.fa-combo input { width: 100%; box-sizing: border-box; }
+.fa-combo-list { position: absolute; left: 0; right: 0; top: calc(100% + 4px); z-index: 60; background: #fff; border: 1px solid #cfd6e0; border-radius: 10px; box-shadow: 0 10px 28px rgba(15,37,64,.18); max-height: 300px; overflow-y: auto; }
+.fa-combo-list[hidden] { display: none; }
+.fa-combo-list div { padding: 9px 12px; font-size: 13px; cursor: pointer; border-bottom: 1px solid #f1f4f8; }
+.fa-combo-list div small { color: #94a3b8; font-weight: 700; margin-left: 6px; }
+.fa-combo-list div:hover, .fa-combo-list div.aktif { background: #e8efff; color: #1d4ed8; }
+.fa-combo-list .kosong { color: #94a3b8; cursor: default; }
+body.dark .fa-combo-list { background: #101c31; border-color: #22334f; }
+body.dark .fa-combo-list div { border-color: #16233c; color: #e2e8f0; }
+body.dark .fa-combo-list div:hover, body.dark .fa-combo-list div.aktif { background: #16294a; color: #60a5fa; }
 .fa-grid .gb-f input[readonly] { background: #f1f5f9; color: #334155; }
 .fa-dua { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 @media (max-width: 760px) { .fa-dua { grid-template-columns: 1fr; } }
@@ -6970,9 +6981,14 @@ body.dark #tabKpiCmo .kci-card.kci-tot,body.cmd #tabKpiCmo .kci-card.kci-tot{bac
         </div>
         <h3 class="fa-h3">Objek jaminan</h3>
         <div class="fa-grid">
-          <div class="gb-f fa-span"><label>Cari type (langsung)</label><input id="faCari" placeholder="ketik mis. agya 1.2 g mt" oninput="faIsiTipe(true)" autocomplete="off"></div>
-          <div class="gb-f"><label>Merk</label><select id="faMerk" onchange="faEl('faCari').value='';faIsiTipe()"><option value="">memuat MRP&hellip;</option></select></div>
-          <div class="gb-f"><label>Type</label><select id="faTipe" onchange="faPilihTipe()"></select></div>
+          <div class="gb-f"><label>Merk</label><select id="faMerk" onchange="faEl('faTipeCari').value='';faEl('faTipe').value='';faIsiTipe()"><option value="">memuat MRP&hellip;</option></select></div>
+          <div class="gb-f"><label>Type (ketik untuk cari)</label>
+            <div class="fa-combo">
+              <input id="faTipeCari" placeholder="&#128269; cari type, mis. agya 1.2 g mt" autocomplete="off"
+                onfocus="faBukaList()" oninput="faEl('faTipe').value='';faIsiTipe();faBukaList()" onkeydown="faKeyList(event)" onblur="setTimeout(faTutupList,180)">
+              <div class="fa-combo-list" id="faTipeList" hidden></div>
+              <select id="faTipe" hidden></select>
+            </div></div>
           <div class="gb-f"><label>Tahun</label><select id="faTahun" onchange="faHargaDariMrp()"></select></div>
           <div class="gb-f"><label>Warna</label><input id="faWarna"></div>
           <div class="gb-f"><label>No. rangka</label><input id="faRangka" style="text-transform:uppercase"></div>
@@ -7017,7 +7033,7 @@ body.dark #tabKpiCmo .kci-card.kci-tot,body.cmd #tabKpiCmo .kci-card.kci-tot{bac
       <div class="card fa-card">
         <h2>4. Pricing</h2>
         <div class="fa-grid">
-          <div class="gb-f"><label>Harga pasar</label><input class="fa-rp" id="faHargaPasar" inputmode="numeric" oninput="faKetikRp(this)"><div class="gb-kecil" id="faInfoMrp"></div></div>
+          <div class="gb-f"><label>Harga pasar (OTR MRP)</label><input class="fa-rp" id="faHargaPasar" readonly placeholder="otomatis setelah pilih type &amp; tahun"><div class="gb-kecil" id="faInfoMrp"></div></div>
           <div class="gb-f"><label>Biaya perbaikan kendaraan</label><input class="fa-rp" id="faBiayaPerbaikan" readonly><div class="gb-kecil">otomatis dari estimasi perbaikan + perpanjangan</div></div>
           <div class="gb-f fa-uc"><label>DP / uang muka</label><input class="fa-rp" id="faDp" inputmode="numeric" oninput="faDpManual=!!this.value;faKetikRp(this);faHitungAngsuran()"><div class="gb-kecil" id="faInfoDp"></div></div>
           <div class="gb-f fa-uc"><label>Metode DP</label><select id="faMetode" onchange="faHitungAngsuran()"><option value="ADDB">ADDB</option><option value="ADDM">ADDM</option></select></div>
@@ -19831,28 +19847,63 @@ function faLabelTipe(r) {
   if (!j) return t;
   return j.toUpperCase().indexOf(t.toUpperCase()) === 0 || !t ? j : t + ' ' + j;
 }
-function faIsiTipe(dariCari) {
-  var m = faEl('faMerk').value, cari = faTxt('faCari').toLowerCase(), sel = faEl('faTipe'), lama = sel.value;
+var faDaftarTipe = [], faIdxList = -1;
+function faIsiTipe() {
+  var m = faEl('faMerk').value, cari = faTxt('faTipeCari').toLowerCase(), sel = faEl('faTipe'), lama = sel.value;
+  var r0 = faBaris();
+  if (r0 && cari === faLabelTipe(r0).toLowerCase()) cari = '';          /* teks = type terpilih -> tampilkan semua varian merk */
   var kata = cari ? cari.split(/\s+/) : [];
   var daftar = [];
   (ucData ? ucData.rows : []).forEach(function (r, i) {
-    if (!kata.length && m && r.brand !== m) return;
-    if (!kata.length && !m) return;
+    if (m && r.brand !== m) return;
+    if (!m && !kata.length) return;
     var teks = (r.brand + ' ' + r.tipe + ' ' + (r.jenis || '')).toLowerCase();
     for (var k = 0; k < kata.length; k++) if (teks.indexOf(kata[k]) < 0) return;
-    daftar.push({ i: i, t: faLabelTipe(r) + (kata.length && !m ? '  (' + r.brand + ')' : '') });
+    daftar.push({ i: i, t: faLabelTipe(r), b: r.brand });
   });
   daftar.sort(function (a, b) { return a.t < b.t ? -1 : 1; });
-  if (daftar.length > 300) daftar = daftar.slice(0, 300);
-  sel.innerHTML = '<option value="">' + (daftar.length ? '- pilih type (' + daftar.length + ') -' : (kata.length ? 'tidak ada yang cocok' : '- pilih merk / cari type -')) + '</option>' +
-    daftar.map(function (d) { return '<option value="' + d.i + '">' + gbEsc(d.t) + '</option>'; }).join('');
-  if (lama && daftar.some(function (d) { return String(d.i) === lama; })) sel.value = lama;
-  else if (dariCari && daftar.length === 1) sel.value = String(daftar[0].i);
+  faDaftarTipe = daftar.slice(0, 200);
+  sel.innerHTML = '<option value=""></option>' + faDaftarTipe.map(function (d) { return '<option value="' + d.i + '">' + gbEsc(d.t) + '</option>'; }).join('');
+  if (lama) sel.value = lama;
+  faIdxList = -1;
+  faGambarList(daftar.length, !m && !kata.length);
+  if (!sel.value) faIsiTahun();
+}
+function faGambarList(total, belum) {
+  var el = faEl('faTipeList'), m = faEl('faMerk').value;
+  if (belum) { el.innerHTML = '<div class="kosong">Pilih merk dulu, atau ketik nama type (mis. agya 1.2 g mt)</div>'; return; }
+  if (!faDaftarTipe.length) { el.innerHTML = '<div class="kosong">Tidak ada type yang cocok</div>'; return; }
+  el.innerHTML = faDaftarTipe.map(function (d, k) {
+    return '<div data-k="' + k + '" class="' + (k === faIdxList ? 'aktif' : '') + '" onmousedown="event.preventDefault();faPilihDariList(' + k + ')">' + gbEsc(d.t) + (m ? '' : '<small>' + gbEsc(d.b) + '</small>') + '</div>';
+  }).join('') + (total > faDaftarTipe.length ? '<div class="kosong">&hellip; ' + (total - faDaftarTipe.length) + ' lagi, ketik lebih spesifik</div>' : '');
+}
+function faBukaList() { faIsiTipe(); faEl('faTipeList').hidden = false; }
+function faTutupList() {
+  faEl('faTipeList').hidden = true;
+  var r = faBaris(); faEl('faTipeCari').value = r ? faLabelTipe(r) : faEl('faTipeCari').value;
+}
+function faPilihDariList(k) {
+  var d = faDaftarTipe[k]; if (!d) return;
+  faEl('faTipe').value = String(d.i);
+  faEl('faTipeCari').value = d.t;
+  faEl('faTipeList').hidden = true;
   faPilihTipe();
+}
+function faKeyList(e) {
+  var el = faEl('faTipeList');
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    e.preventDefault(); if (el.hidden) faBukaList();
+    faIdxList = Math.max(0, Math.min(faDaftarTipe.length - 1, faIdxList + (e.key === 'ArrowDown' ? 1 : -1)));
+    faGambarList(faDaftarTipe.length, false);
+    var a = el.querySelector('.aktif'); if (a) a.scrollIntoView({ block: 'nearest' });
+  } else if (e.key === 'Enter') {
+    e.preventDefault(); faPilihDariList(faIdxList >= 0 ? faIdxList : 0);
+  } else if (e.key === 'Escape') { el.hidden = true; }
 }
 function faPilihTipe() {
   var r = faBaris();
   if (r && faEl('faMerk').value !== r.brand) faEl('faMerk').value = r.brand;
+  if (r) faEl('faTipeCari').value = faLabelTipe(r);
   faIsiTahun();
 }
 function faBaris() {
