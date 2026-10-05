@@ -23,7 +23,7 @@
   var API_URL = "https://script.google.com/macros/s/AKfycbx7G9oWxfUrpJCrahFVcdACQQxdRCr7P7eiKKEA_VB4XEYPuC6pYh2wJMyI-jJ49DYLtQ/exec";
 
   /* fungsi server yang boleh dipanggil — harus sama dengan daftar di Api.gs */
-  var FUNGSI = ["loginUser", "cekSesi", "logoutUser", "gantiPassword", "daftarUser", "tambahUser", "resetPasswordUser", "ubahStatusUser", "fetchSheetCSV", "fetchJualanCSV", "fetchTarikanCSV", "fetchLapMeetingCSV", "fetchTarikanAllCSV", "fetchStockTahunan", "bacaSheetAman", "getPeriodeMrp", "getPeriodeMrpSorum", "getMrpSorumBekas", "getMatriksRangka", "bacaStnk", "bacaAppraisal", "catatVerifikasi", "fetchHargaAyda", "getDataPembiayaan", "bacaTacDealer", "ajukanPengajuanHarga", "ambilBerkasDrive", "fetchKelengkapanEstimasi", "fetchPengajuanHarga", "simpanBastLengkap", "simpanGabunganEstimasi", "simpanKeteranganEstimasi", "simpanMemoHarga", "simpanMemoMassal", "unggahBerkasEstimasi", "getDaftarCabang", "fetchKpiCmoList", "fetchKpiCmoDetail", "simpanAktivitas", "simpanProspek", "updateStatusProspek", "fetchAktivitasList", "fetchProspekList", "fetchKpiCmoRekap"];
+  var FUNGSI = ["loginUser", "cekSesi", "logoutUser", "gantiPassword", "daftarUser", "tambahUser", "resetPasswordUser", "ubahStatusUser", "fetchSheetCSV", "fetchJualanCSV", "fetchTarikanCSV", "fetchLapMeetingCSV", "fetchTarikanAllCSV", "fetchStockTahunan", "bacaSheetAman", "getPeriodeMrp", "getPeriodeMrpSorum", "getMrpSorumBekas", "getMatriksRangka", "bacaStnk", "bacaAppraisal", "catatVerifikasi", "fetchHargaAyda", "getDataPembiayaan", "bacaTacDealer", "ajukanPengajuanHarga", "ambilBerkasDrive", "fetchKelengkapanEstimasi", "fetchPengajuanHarga", "simpanBastLengkap", "simpanGabunganEstimasi", "simpanKeteranganEstimasi", "simpanMemoHarga", "simpanMemoMassal", "unggahBerkasEstimasi", "getDaftarCabang", "fetchKpiCmoList", "fetchKpiCmoDetail", "simpanAktivitas", "simpanProspek", "updateStatusProspek", "fetchAktivitasList", "fetchProspekList", "fetchKpiCmoRekap", "ttdAmbil", "ttdSimpan", "ttdSimpanPosisi", "ttdHapus"];
 
   function panggil(nama, args, ok, gagal, obj) {
     fetch(API_URL, {
@@ -6880,7 +6880,7 @@ body.dark #tabKpiCmo .kci-card.kci-tot,body.cmd #tabKpiCmo .kci-card.kci-tot{bac
             <button type="button" onclick="gbTtdHapus()">Hapus TTD</button>
             <button type="button" class="utama" onclick="gbTtdBukaPosisi()">Atur posisi di PDF</button>
           </div>
-          <label class="gb-ttd-cek"><input type="checkbox" id="gbTtdPakai" onchange="gbTtdSegarkan()"> Bubuhkan tanda tangan saya saat menggabung</label>
+          <label class="gb-ttd-cek"><input type="checkbox" id="gbTtdPakai" onchange="this.dataset.disentuh='1';try{localStorage.setItem('cmdTtdMati',this.checked?'0':'1')}catch(e){};gbTtdSegarkan()"> Bubuhkan tanda tangan saya saat menggabung</label>
         </div>
         <div class="gb-ttd-modal" id="gbTtdModal" hidden>
           <div class="gb-ttd-kotak">
@@ -19239,22 +19239,58 @@ var GB_TTD_KUNCI = 'cmdTtdHo';
 function gbTtdBoleh() { return typeof currentLoginRole !== 'undefined' && String(currentLoginRole).toUpperCase() === 'HO'; }
 function gbTtdAmbil() { try { return localStorage.getItem(GB_TTD_KUNCI) || ''; } catch (e) { return ''; } }
 function gbTtdPosAmbil(n) { try { return (JSON.parse(localStorage.getItem('cmdTtdPos') || '{}') || {})[n] || null; } catch (e) { return null; } }
-function gbTtdPosSimpan(n, pos) { try { var o = JSON.parse(localStorage.getItem('cmdTtdPos') || '{}') || {}; o[n] = pos; localStorage.setItem('cmdTtdPos', JSON.stringify(o)); } catch (e) {} }
+function gbTtdPosSimpan(n, pos) {
+  var o = {};
+  try { o = JSON.parse(localStorage.getItem('cmdTtdPos') || '{}') || {}; o[n] = pos; localStorage.setItem('cmdTtdPos', JSON.stringify(o)); } catch (e) {}
+  gbTtdServer('ttdSimpanPosisi', [o]);
+}
+/* ---- simpan di AKUN (server), supaya TTD ikut ke perangkat mana pun saat login ---- */
+function gbTtdToken() { try { return localStorage.getItem('cmdSesiToken') || ''; } catch (e) { return ''; } }
+function gbTtdAdaServer(fn) { return window.google && google.script && google.script.run && typeof google.script.run[fn] === 'function'; }
+function gbTtdServer(fn, args, ok, gagal) {
+  if (!gbTtdBoleh() || !gbTtdAdaServer(fn)) { if (gagal) gagal(new Error('belum dipasang')); return; }
+  var r = google.script.run.withSuccessHandler(function (d) { gbTtdAkun = 'ok'; if (ok) ok(d); })
+    .withFailureHandler(function (e) { var m = (e && e.message) || String(e); if (/tidak diizinkan|belum ada/i.test(m)) gbTtdAkun = 'belum'; if (gagal) gagal(e); });
+  r[fn].apply(r, [gbTtdToken()].concat(args || []));
+}
+var gbTtdAkun = '', gbTtdSudahSinkron = false;
+function gbTtdSinkron(paksa) {
+  if (!gbTtdBoleh() || (gbTtdSudahSinkron && !paksa)) return;
+  gbTtdSudahSinkron = true;
+  gbTtdServer('ttdAmbil', [], function (d) {
+    d = d || {};
+    try {
+      if (d.png) localStorage.setItem(GB_TTD_KUNCI, d.png);
+      else if (gbTtdAmbil()) gbTtdServer('ttdSimpan', [gbTtdAmbil()]);          /* TTD lama di perangkat ini -> naikkan ke akun */
+      if (d.pos && Object.keys(d.pos).length) {
+        var lokal = JSON.parse(localStorage.getItem('cmdTtdPos') || '{}') || {};
+        localStorage.setItem('cmdTtdPos', JSON.stringify(Object.assign(lokal, d.pos)));
+      } else if (localStorage.getItem('cmdTtdPos')) gbTtdServer('ttdSimpanPosisi', [JSON.parse(localStorage.getItem('cmdTtdPos'))]);
+    } catch (e) {}
+    gbTtdSegarkan();
+  }, function () { gbTtdSegarkan(); });   /* gagal: coba lagi saat tab dibuka ulang (gbTtdSinkron(true)) */
+}
 var gbTtdJmlHal = 0;
 function gbTtdSegarkan() {
   var panel = gbEl('gbTtdPanel'); if (!panel) return;
   panel.hidden = !gbTtdBoleh();
   if (panel.hidden) return;
   var ttd = gbTtdAmbil(), pra = gbEl('gbTtdPratinjau'), st = gbEl('gbTtdStatus'), cek = gbEl('gbTtdPakai');
+  gbTtdSinkron();
   pra.innerHTML = ttd ? '<img alt="TTD" src="' + ttd + '">' : 'belum ada';
+  var catAkun = gbTtdAkun === 'ok' ? ' <span style="color:#1f7a4d;font-weight:700">&#10004; tersimpan di akun</span>'
+             : (gbTtdAkun === 'belum' ? ' <span style="color:#a16207">(baru tersimpan di perangkat ini &ndash; TtdHo.gs belum dipasang di Apps Script)</span>' : '');
   if (!ttd) { cek.checked = false; cek.disabled = true; st.innerHTML = 'Belum ada tanda tangan. Unggah foto TTD (tanda tangan di kertas putih) atau tulis langsung.'; return; }
   cek.disabled = false;
   if (!gbFile.apr || !gbIsPdf(gbFile.apr)) { st.innerHTML = 'Tanda tangan hanya bisa dibubuhkan kalau berkas appraiser berupa PDF.'; cek.checked = false; cek.disabled = true; return; }
   var hitung = gbTtdJmlHal ? Promise.resolve(gbTtdJmlHal) : gbBukaPdf(gbFile.apr).then(function (pdf) { gbTtdJmlHal = pdf.numPages; return pdf.numPages; });
   hitung.then(function (n) {
     var pos = gbTtdPosAmbil(n);
-    st.innerHTML = pos ? '&#10004; Posisi tersimpan: halaman ' + pos.hal + ' dari ' + n + '. Cek / ubah lewat <b>Atur posisi</b>.'
-                       : 'Posisi belum diatur. Klik <b>Atur posisi di PDF</b>, lalu sentuh kolom tanda tangan yang kosong.';
+    st.innerHTML = (pos ? '&#10004; Posisi tersimpan: halaman ' + pos.hal + ' dari ' + n + '. Cek / ubah lewat <b>Atur posisi</b>.'
+                       : 'Posisi belum diatur. Klik <b>Atur posisi di PDF</b>, lalu sentuh kolom tanda tangan yang kosong.') + catAkun;
+    /* langsung siap: kalau TTD & posisi sudah ada, otomatis tercentang (kecuali sengaja dimatikan) */
+    var mati = false; try { mati = localStorage.getItem('cmdTtdMati') === '1'; } catch (e) {}
+    if (pos && !cek.dataset.disentuh) cek.checked = !mati;
     if (cek.checked && !pos) { cek.checked = false; gbTtdBukaPosisi(); }
   }).catch(function () {});
 }
@@ -19284,8 +19320,9 @@ function gbTtdBersihkan(src, w, h) {
   return k.toDataURL('image/png');
 }
 function gbTtdSimpan(url) {
-  try { localStorage.setItem(GB_TTD_KUNCI, url); } catch (e) { gbPesan('bahaya', 'Tanda tangan gagal disimpan di perangkat ini (memori browser penuh / mode penyamaran).'); return false; }
+  try { localStorage.setItem(GB_TTD_KUNCI, url); localStorage.setItem('cmdTtdMati', '0'); } catch (e) { gbPesan('bahaya', 'Tanda tangan gagal disimpan di perangkat ini (memori browser penuh / mode penyamaran).'); return false; }
   var cek = gbEl('gbTtdPakai'); if (cek) cek.checked = true;
+  gbTtdServer('ttdSimpan', [url], function () { gbTtdSegarkan(); }, function (e) { gbTtdSegarkan(); });
   gbTtdSegarkan(); return true;
 }
 function gbTtdUnggah(inp) {
@@ -19296,8 +19333,9 @@ function gbTtdUnggah(inp) {
 }
 function gbTtdHapus() {
   if (!gbTtdAmbil()) return;
-  if (!confirm('Hapus tanda tangan yang tersimpan di perangkat ini?')) return;
-  try { localStorage.removeItem(GB_TTD_KUNCI); } catch (e) {}
+  if (!confirm('Hapus tanda tangan yang tersimpan di akun & perangkat ini?')) return;
+  try { localStorage.removeItem(GB_TTD_KUNCI); localStorage.removeItem('cmdTtdPos'); } catch (e) {}
+  gbTtdServer('ttdHapus', []);
   gbTtdSegarkan();
 }
 /* --- tulis TTD langsung (mouse / jari) --- */
@@ -26172,7 +26210,7 @@ body.dark #tabTac table.tac-aturan td.kode, body.cmd #tabTac table.tac-aturan td
     window.switchTab = function (id) {
       var r = asli.apply(this, arguments);
       setTimeout(function () { var t = document.getElementById(id); if (t) tambah(t); }, 250);
-      if (id === 'tabGabungBerkas') { try { gbSiapkanOcr(); } catch (e) {} }
+      if (id === 'tabGabungBerkas') { try { gbSiapkanOcr(); gbTtdSinkron(gbTtdAkun !== 'ok'); } catch (e) {} }
       return r;
     };
     window.switchTab.__cg = true;
