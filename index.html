@@ -23,7 +23,7 @@
   var API_URL = "https://script.google.com/macros/s/AKfycbx7G9oWxfUrpJCrahFVcdACQQxdRCr7P7eiKKEA_VB4XEYPuC6pYh2wJMyI-jJ49DYLtQ/exec";
 
   /* fungsi server yang boleh dipanggil — harus sama dengan daftar di Api.gs */
-  var FUNGSI = ["loginUser", "cekSesi", "logoutUser", "gantiPassword", "daftarUser", "tambahUser", "resetPasswordUser", "ubahStatusUser", "fetchSheetCSV", "fetchJualanCSV", "fetchTarikanCSV", "fetchLapMeetingCSV", "fetchTarikanAllCSV", "fetchStockTahunan", "bacaSheetAman", "getPeriodeMrp", "getPeriodeMrpSorum", "getMrpSorumBekas", "getMatriksRangka", "bacaStnk", "bacaAppraisal", "catatVerifikasi", "fetchHargaAyda", "getDataPembiayaan", "bacaTacDealer", "ajukanPengajuanHarga", "ambilBerkasDrive", "fetchKelengkapanEstimasi", "fetchPengajuanHarga", "simpanBastLengkap", "simpanGabunganEstimasi", "simpanKeteranganEstimasi", "simpanMemoHarga", "simpanMemoMassal", "unggahBerkasEstimasi", "getDaftarCabang", "fetchKpiCmoList", "fetchKpiCmoDetail", "simpanAktivitas", "simpanProspek", "updateStatusProspek", "fetchAktivitasList", "fetchProspekList", "fetchKpiCmoRekap", "ttdAmbil", "ttdSimpan", "ttdSimpanPosisi", "ttdHapus"];
+  var FUNGSI = ["loginUser", "cekSesi", "logoutUser", "gantiPassword", "daftarUser", "tambahUser", "resetPasswordUser", "ubahStatusUser", "fetchSheetCSV", "fetchJualanCSV", "fetchTarikanCSV", "fetchLapMeetingCSV", "fetchTarikanAllCSV", "fetchStockTahunan", "bacaSheetAman", "getPeriodeMrp", "getPeriodeMrpSorum", "getMrpSorumBekas", "getMatriksRangka", "bacaStnk", "bacaAppraisal", "catatVerifikasi", "fetchHargaAyda", "getDataPembiayaan", "bacaTacDealer", "ajukanPengajuanHarga", "ambilBerkasDrive", "fetchKelengkapanEstimasi", "fetchPengajuanHarga", "simpanBastLengkap", "simpanGabunganEstimasi", "simpanKeteranganEstimasi", "simpanMemoHarga", "simpanMemoMassal", "unggahBerkasEstimasi", "getDaftarCabang", "fetchKpiCmoList", "fetchKpiCmoDetail", "simpanAktivitas", "simpanProspek", "updateStatusProspek", "fetchAktivitasList", "fetchProspekList", "fetchKpiCmoRekap", "ttdAmbil", "ttdSimpan", "ttdSimpanPosisi", "ttdHapus", "simpanAppraisal"];
 
   function panggil(nama, args, ok, gagal, obj) {
     fetch(API_URL, {
@@ -1517,6 +1517,55 @@ body.cmd .kh-harga input { color: #fbf3ea; }
 .lipat-btn { flex: none; border: 1px solid #cfd6e0; background: #f7f9fb; color: #0f2540; border-radius: 8px; padding: 6px 12px; font-size: 11.5px; font-weight: 800; cursor: pointer; }
 .lipat-kepala.buka .lipat-btn { background: #0f2540; color: #fff; border-color: #0f2540; }
 .lipat-isi.tertutup { display: none; }
+/* ==================== FORM APPRAISAL ==================== */
+#tabAppraisal .fa-card h2 { margin-bottom: 4px; }
+.fa-h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .6px; color: #5b6b80; margin: 14px 0 8px; font-weight: 800; }
+.fa-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 12px; }
+@media (max-width: 900px) { .fa-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .fa-grid { grid-template-columns: 1fr; } }
+.fa-grid .gb-f input, .fa-grid .gb-f select { width: 100%; box-sizing: border-box; }
+.fa-grid .gb-f input[readonly] { background: #f1f5f9; color: #334155; }
+.fa-dua { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 760px) { .fa-dua { grid-template-columns: 1fr; } }
+.fa-tbl { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-bottom: 8px; }
+.fa-tbl th { background: #0f2540; color: #fff; text-align: left; padding: 7px 8px; font-size: 11px; letter-spacing: .3px; }
+.fa-tbl td { border-bottom: 1px solid #e5eaf0; padding: 5px 6px; }
+.fa-tbl input { width: 100%; box-sizing: border-box; padding: 7px 8px; border: 1px solid #cfd6e0; border-radius: 7px; font-size: 12.5px; }
+.fa-btn { border: 1px solid #cfd6e0; background: #fff; color: #0f2540; border-radius: 8px; padding: 8px 12px; font-size: 12px; font-weight: 800; cursor: pointer; }
+.fa-btn.kecil { padding: 5px 10px; font-size: 11.5px; }
+.fa-baris-tombol { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+.fa-kondisi { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 6px; margin-top: 10px; }
+.fa-k { border: 1px solid #d8e0ea; border-radius: 9px; padding: 7px 9px; background: #f6fbf8; cursor: pointer; font-size: 12px; color: #0f2540; display: flex; flex-direction: column; gap: 4px; user-select: none; }
+.fa-k b { font-weight: 700; display: flex; justify-content: space-between; gap: 6px; }
+.fa-k b span { font-size: 10.5px; color: #1f7a4d; font-weight: 800; }
+.fa-k.tdk { background: #fdecec; border-color: #f2b8b8; }
+.fa-k.tdk b span { color: #b91c1c; }
+.fa-k input { display: none; border: 1px solid #e3a3a3; border-radius: 6px; padding: 4px 6px; font-size: 11.5px; }
+.fa-k.tdk input { display: block; }
+.fa-ttd { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 900px) { .fa-ttd { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .fa-ttd { grid-template-columns: 1fr; } }
+.fa-ttd > div { border: 1px solid #dbe3ee; border-radius: 10px; padding: 9px; background: #f8fafc; display: flex; flex-direction: column; gap: 6px; }
+.fa-ttd small { font-size: 10.5px; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; color: #64748b; }
+.fa-ttd input { width: 100%; box-sizing: border-box; padding: 7px 8px; border: 1px solid #cfd6e0; border-radius: 7px; font-size: 12.5px; }
+.fa-foto { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.fa-foto.dua { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 520px) { .fa-foto { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.fa-slot { position: relative; border: 1.5px dashed #c5cfdc; border-radius: 10px; background: #f8fafc; aspect-ratio: 4 / 3; overflow: hidden; cursor: pointer; display: flex; align-items: flex-end; }
+.fa-foto.dua .fa-slot { aspect-ratio: 16 / 9; }
+.fa-slot input { position: absolute; inset: 0; opacity: 0; cursor: pointer; z-index: 2; }
+.fa-slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.fa-slot span { position: relative; z-index: 1; width: 100%; background: rgba(15,37,64,.86); color: #fff; font-size: 11px; font-weight: 800; padding: 5px 7px; }
+.fa-slot.isi { border-style: solid; border-color: #1f7a4d; }
+.fa-slot .fa-plus { position: absolute; inset: 0; display: grid; place-items: center; font-size: 26px; color: #a8b4c4; }
+.fa-slot.isi .fa-plus { display: none; }
+.fa-putar { display: none; position: absolute; top: 6px; right: 6px; z-index: 3; width: 32px; height: 32px; border-radius: 50%; border: 0; background: rgba(15,37,64,.85); color: #fff; font-size: 17px; cursor: pointer; }
+.fa-slot.isi .fa-putar { display: block; }
+body.dark .fa-k { background: #12261c; border-color: #22334f; color: #e2e8f0; }
+body.dark .fa-k.tdk { background: #3a1616; }
+body.dark .fa-ttd > div, body.dark .fa-slot { background: #101a2c; border-color: #22334f; }
+body.dark .fa-grid .gb-f input[readonly] { background: #16233c; color: #cbd5e1; }
+
 /* ==================== GABUNG BERKAS ==================== */
 .gb-ttd { border: 1px solid #dbe3ee; border-radius: 12px; padding: 12px 14px; margin: 12px 0; background: #f8fafc; }
 .gb-ttd[hidden] { display: none !important; }
@@ -3840,6 +3889,7 @@ window.addEventListener('load', function () { setTimeout(function () { if (!cmdS
         <button class="tab-btn" data-tab="tabSorumBekas" id="btnTabSorum" onclick="switchTab('tabSorumBekas')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h4M7 12h2M7 16h2"/><path d="M14 12h3M14 16h3"/></svg><span>KALKULATOR USED CAR</span></button>
         <button class="tab-btn" data-tab="tabDanaTunai" id="btnTabDatun" onclick="switchTab('tabDanaTunai')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M6 12h.01M18 12h.01"/></svg><span>KALKULATOR DANA TUNAI</span></button>
         <button class="tab-btn" data-tab="tabGabungBerkas" id="btnTabGabung" onclick="switchTab('tabGabungBerkas')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="m9 15 2 2 4-4"/></svg><span>GABUNG BERKAS</span></button>
+        <button class="tab-btn" data-tab="tabAppraisal" id="btnTabAppraisal" onclick="switchTab('tabAppraisal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/><circle cx="17" cy="17" r="2.5"/></svg><span>FORM APPRAISAL</span></button>
         <button class="tab-btn" data-tab="tabMotorBekas" id="btnTabMotor" onclick="switchTab('tabMotorBekas')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17" r="3.5"/><circle cx="18.5" cy="17" r="3.5"/><path d="M5.5 17h6l4-7h3M12 10h4M9 6h3l2 4"/></svg><span>KALKULATOR MOTOR BEKAS</span></button>
         <button class="tab-btn" data-tab="tabKelolaUser" id="btnTabUser" onclick="switchTab('tabKelolaUser')" style="display:none;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c1-3.5 3.6-5.5 6.5-5.5s5.5 2 6.5 5.5"/><path d="M18 8v6M15 11h6"/></svg><span>KELOLA PENGGUNA</span></button>
       </nav>
@@ -6904,6 +6954,101 @@ body.dark #tabKpiCmo .kci-card.kci-tot,body.cmd #tabKpiCmo .kci-card.kci-tot{bac
       </div>
     </div>
     <!-- ==================== AKHIR TAB GABUNG BERKAS ==================== -->
+    <!-- ==================== TAB FORM APPRAISAL ==================== -->
+    <div id="tabAppraisal" class="tab-content">
+      <div class="card fa-card">
+        <h2>1. Data nasabah &amp; unit</h2>
+        <p class="gb-sub">Isi data, harga pasar otomatis dari database MRP. Hasilnya 1 PDF: form + pricing + tanda tangan (1 halaman), lampiran 9 foto, dan STNK depan-belakang.</p>
+        <div class="fa-grid">
+          <div class="gb-f"><label>Jenis pengajuan</label><select id="faJenis" onchange="faHitung()"><option value="UC">Used Car (pembelian unit)</option><option value="DT">Dana Tunai</option></select></div>
+          <div class="gb-f"><label>Status nasabah</label><select id="faStatus"><option>NEW</option><option>RO</option></select></div>
+          <div class="gb-f"><label>Nama nasabah</label><input id="faNama" placeholder="nama sesuai KTP"></div>
+          <div class="gb-f"><label>Pekerjaan</label><input id="faPekerjaan" placeholder="mis. Kebun kelapa sawit"></div>
+          <div class="gb-f"><label>Penghasilan</label><select id="faPenghasilan"><option>Fix</option><option>Variabel</option><option>Fix &amp; Variabel</option><option>Variabel &amp; Non Variabel</option></select></div>
+          <div class="gb-f"><label>Sumber order</label><input id="faSumber" placeholder="mis. Dealer / Agen / Walk in"></div>
+        </div>
+        <h3 class="fa-h3">Objek jaminan</h3>
+        <div class="fa-grid">
+          <div class="gb-f"><label>Merk</label><select id="faMerk" onchange="faIsiTipe()"><option value="">memuat MRP&hellip;</option></select></div>
+          <div class="gb-f"><label>Type</label><select id="faTipe" onchange="faIsiTahun()"></select></div>
+          <div class="gb-f"><label>Tahun</label><select id="faTahun" onchange="faHargaDariMrp()"></select></div>
+          <div class="gb-f"><label>Warna</label><input id="faWarna"></div>
+          <div class="gb-f"><label>No. rangka</label><input id="faRangka" style="text-transform:uppercase"></div>
+          <div class="gb-f"><label>No. mesin</label><input id="faMesin" style="text-transform:uppercase"></div>
+          <div class="gb-f"><label>Nomor polisi</label><input id="faNopol" style="text-transform:uppercase" placeholder="BL 1234 AB"></div>
+          <div class="gb-f"><label>Nama STNK</label><input id="faNamaStnk"></div>
+          <div class="gb-f"><label>Masa berlaku STNK</label><input id="faBerlakuStnk" type="date"></div>
+          <div class="gb-f"><label>Masa berlaku pajak</label><input id="faBerlakuPajak" type="date"></div>
+          <div class="gb-f"><label>No. BPKB</label><input id="faBpkb" style="text-transform:uppercase"></div>
+          <div class="gb-f"><label>Kwitansi kosong</label><select id="faKwitansi"><option>Ada</option><option>Tidak Ada</option></select></div>
+          <div class="gb-f"><label>Faktur</label><select id="faFaktur"><option>Ada</option><option>Tidak Ada</option></select></div>
+          <div class="gb-f"><label>S.R.U.T (unit 2019 ke atas)</label><select id="faSrut"><option>Ada</option><option>Tidak Ada</option><option>-</option></select></div>
+        </div>
+        <div class="fa-baris-tombol"><button type="button" class="fa-btn" onclick="faDariSimulasi()">Isi dari simulasi Used Car terakhir</button><span class="gb-kecil" id="faInfoSim"></span></div>
+      </div>
+
+      <div class="card fa-card">
+        <h2>2. Kondisi objek jaminan</h2>
+        <p class="gb-sub">Semua awalnya <b>Ada</b>. Sentuh item yang <b>tidak ada / rusak</b>, lalu isi keterangannya kalau perlu.</p>
+        <div class="fa-baris-tombol"><button type="button" class="fa-btn" onclick="faSemuaAda()">Semua Ada</button><span class="gb-kecil" id="faJmlTdk"></span></div>
+        <div class="fa-kondisi" id="faKondisi"></div>
+      </div>
+
+      <div class="card fa-card">
+        <h2>3. Estimasi biaya</h2>
+        <div class="fa-dua">
+          <div>
+            <h3 class="fa-h3">Perbaikan kendaraan</h3>
+            <table class="fa-tbl" id="faTblPerbaikan"><thead><tr><th>Bagian sparepart</th><th>Estimasi cabang</th></tr></thead><tbody></tbody></table>
+            <button type="button" class="fa-btn kecil" onclick="faTambahPerbaikan()">+ Tambah baris</button>
+          </div>
+          <div>
+            <h3 class="fa-h3">Perpanjangan pajak &amp; STNK</h3>
+            <table class="fa-tbl"><thead><tr><th>Keterangan</th><th>Estimasi cabang</th></tr></thead><tbody>
+              <tr><td>Pajak + Denda</td><td><input class="fa-rp" id="faPajakDenda" inputmode="numeric" oninput="faKetikRp(this)"></td></tr>
+              <tr><td>SWDKLLJ + Denda</td><td><input class="fa-rp" id="faSwdkllj" inputmode="numeric" oninput="faKetikRp(this)"></td></tr>
+              <tr><td>Biaya ADM</td><td><input class="fa-rp" id="faBiayaAdm" inputmode="numeric" oninput="faKetikRp(this)"></td></tr>
+            </tbody></table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card fa-card">
+        <h2>4. Pricing</h2>
+        <div class="fa-grid">
+          <div class="gb-f"><label>Harga pasar</label><input class="fa-rp" id="faHargaPasar" inputmode="numeric" oninput="faKetikRp(this)"><div class="gb-kecil" id="faInfoMrp"></div></div>
+          <div class="gb-f"><label>Biaya perbaikan kendaraan</label><input class="fa-rp" id="faBiayaPerbaikan" readonly><div class="gb-kecil">otomatis dari estimasi perbaikan + perpanjangan</div></div>
+          <div class="gb-f fa-uc"><label>DP / uang muka</label><input class="fa-rp" id="faDp" inputmode="numeric" oninput="faKetikRp(this)"><div class="gb-kecil" id="faInfoDp"></div></div>
+          <div class="gb-f fa-uc"><label>Metode DP</label><select id="faMetode" onchange="faHitung()"><option value="ADDB">ADDB</option><option value="ADDM">ADDM</option></select></div>
+          <div class="gb-f fa-dt"><label>Maks pinjaman (80% harga pasar)</label><input class="fa-rp" id="faMaksPinjam" readonly></div>
+          <div class="gb-f fa-dt"><label>Pinjaman dimohon</label><input class="fa-rp" id="faPinjam" inputmode="numeric" oninput="faKetikRp(this)"><div class="gb-kecil" id="faInfoPinjam"></div></div>
+          <div class="gb-f"><label>Tenor (bulan)</label><input id="faTenor" inputmode="numeric" placeholder="mis. 60"></div>
+          <div class="gb-f"><label>Angsuran</label><input class="fa-rp" id="faAngsuran" inputmode="numeric" oninput="faKetikRp(this)"></div>
+          <div class="gb-f fa-uc"><label>Pelunasan dealer</label><input class="fa-rp" id="faPelunasan" inputmode="numeric" oninput="faKetikRp(this)"></div>
+        </div>
+      </div>
+
+      <div class="card fa-card">
+        <h2>5. Nama penandatangan</h2>
+        <p class="gb-sub">Nama &amp; jabatan dicetak di tabel tanda tangan. Kolom tanda tangan dibiarkan kosong untuk diteken; tanggal cetak tercantum otomatis.</p>
+        <div class="fa-ttd" id="faTtd"></div>
+      </div>
+
+      <div class="card fa-card">
+        <h2>6. Lampiran foto (1 halaman, 9 foto)</h2>
+        <p class="gb-sub">Sentuh kotak untuk memotret / memilih foto. Foto otomatis diperkecil supaya PDF ringan.</p>
+        <div class="fa-foto" id="faFoto"></div>
+        <h3 class="fa-h3" style="margin-top:16px">Foto STNK (depan &amp; belakang dalam 1 halaman)</h3>
+        <div class="fa-foto dua" id="faStnk"></div>
+      </div>
+
+      <div class="card fa-card">
+        <button type="button" class="gb-btn utama" id="faBtnPdf" onclick="faBuatPdf()">Buat PDF, Simpan ke Drive &amp; Unduh</button>
+        <div id="faPesan" class="gb-pesan"></div>
+      </div>
+    </div>
+    <!-- ==================== AKHIR TAB FORM APPRAISAL ==================== -->
+
 
     <div id="tabDanaTunai" class="tab-content">
 
@@ -7466,7 +7611,7 @@ function masukAplikasi(u) {
   if (modeGudang) {
     document.body.classList.add("gudang");
     document.querySelectorAll(".side-nav .tab-btn").forEach(el => {
-      el.style.display = (el.id === "btnTabBast" || el.id === "btnTabKelengkapan" || el.id === "btnTabGabung") ? "" : "none";
+      el.style.display = (el.id === "btnTabBast" || el.id === "btnTabKelengkapan" || el.id === "btnTabGabung" || el.id === "btnTabAppraisal") ? "" : "none";
     });
   }
   /* Form BAST Gudang: sementara tidak untuk akun CABANG / AREA (HO & GUDANG tetap bisa) */
@@ -7480,7 +7625,7 @@ function masukAplikasi(u) {
     /* CMC: kalkulator + menu Pembiayaan Dana Tunai (data cabangnya sendiri) */
     const modeCmc = currentLoginRole === "CMC";
     if (modeCmc) document.body.classList.add("cmc");
-    const menuCmo = ["btnTabSorum", "btnTabDatun", "btnTabMotor", "btnTabGabung", "btnTabKpiCmo"].concat(modeCmc ? ["btnTabPbDatun"] : []);
+    const menuCmo = ["btnTabSorum", "btnTabDatun", "btnTabMotor", "btnTabGabung", "btnTabAppraisal", "btnTabKpiCmo"].concat(modeCmc ? ["btnTabPbDatun"] : []);
     document.querySelectorAll(".side-nav .tab-btn").forEach(el => {
       if (menuCmo.indexOf(el.id) < 0) el.style.display = "none";
     });
@@ -18412,6 +18557,23 @@ function gbBacaAiUlang(g, label) {
   return coba(1);
 }
 function gbBacaAi(g) {
+  /* utamakan bacaAppraisal(..., 'stnk') (BacaAppraisal.gs: model Gemini dipilih otomatis), cadangan bacaStnk lama */
+  if (window.google && google.script && google.script.run && typeof google.script.run.bacaAppraisal === 'function' && !gbBacaAi.lama) {
+    return new Promise(function (ok, gagal) {
+      google.script.run
+        .withSuccessHandler(function (d) {
+          if (typeof d === 'string') { try { d = JSON.parse(d); } catch (e) { d = null; } }
+          if (!d) return gagal(new Error('Tidak terbaca'));
+          if (d.error && !d.rangka && !d.nopol) return gagal(new Error(d.error));
+          ok(d);
+        })
+        .withFailureHandler(function (e) { gagal(e instanceof Error ? e : new Error((e && e.message) || String(e))); })
+        .bacaAppraisal(g.base64, g.mime, 'stnk');
+    }).catch(function (e) {
+      if (/tidak diizinkan|belum ada di Apps Script/i.test(e.message || '')) { gbBacaAi.lama = true; return gbBacaAi(g); }
+      throw e;
+    });
+  }
   return new Promise(function (ok, gagal) {
     if (!(window.google && google.script && google.script.run && typeof google.script.run.bacaStnk === 'function')) {
       gagal(new Error('Fungsi bacaStnk belum tersedia di Apps Script.')); return;
@@ -18774,6 +18936,18 @@ function gbOcrDokumen(file, jenis, lapor, senyap) {
       throw gagalOcr(g);
     });
   }
+  /* PDF dari menu Form Appraisal: datanya sudah tertanam (CMDAPR1) -> langsung pakai, tanpa OCR */
+  var lewatMeta = (jenis === 'apr' && typeof PDFLib !== 'undefined')
+    ? gbBuffer(file).then(function (buf) { return PDFLib.PDFDocument.load(buf, { ignoreEncryption: true, updateMetadata: false }); })
+        .then(function (d) { var s = d.getSubject ? (d.getSubject() || '') : ''; return s.indexOf('CMDAPR1:') === 0 ? JSON.parse(s.slice(8)) : null; })
+        .catch(function () { return null; })
+    : Promise.resolve(null);
+  return lewatMeta.then(function (m) {
+    if (!m) return gbOcrPdf();
+    return { data: { hargaPasar: String(m.hargaPasar || ''), pinjamanDimohon: String(m.pinjaman || Math.max(0, (m.hargaPasar || 0) - (m.dp || 0)) || ''),
+                     rangka: m.rangka || '', tahun: m.tahun || '' }, sumber: 'Form Appraisal ' + (m.id || '') };
+  });
+  function gbOcrPdf() {
   return gbBukaPdf(file).then(function (pdf) {
     var halTeks = [], i, jumlahHuruf = 0, n = pdf.numPages;
     for (i = 1; i <= Math.min(n, 12); i++) halTeks.push(i);
@@ -18860,6 +19034,7 @@ function gbOcrDokumen(file, jenis, lapor, senyap) {
       });
     });
   });
+  }
 }
 /* ---------- pra-baca: mulai membaca begitu berkas dipilih, supaya saat klik Baca hasilnya sudah jadi ---------- */
 var gbPra = {}, gbPraRantai = Promise.resolve();
@@ -19515,6 +19690,420 @@ function gbGabung() {
   });
 }
 
+/* =====================================================================
+   FORM APPRAISAL — isi form di dashboard, jadi 1 PDF:
+     hal 1 : form appraisal + pricing + tabel tanda tangan (stempel terverifikasi + waktu cetak)
+     hal 2 : lampiran 9 foto
+     hal 3 : STNK depan & belakang
+   PDF diunduh + disimpan ke Google Drive (simpanAppraisal) + link dicatat di sheet LOG APPRAISAL.
+   ===================================================================== */
+var FA_KONDISI_KIRI = ['Speedometer', 'Batok Speedometer', 'Lampu Depan', 'Tutup Batok atas', 'Handle Klos / Kopling', 'Handle Rem L / R',
+  'Kaca Spion L / R', 'Saklar L / R', 'Kunci Kontak', 'Lampu Sen Depan L / R', 'Ban + Lingkar Depan', 'Gigi Kilometer', 'Tali Kilometer',
+  'Kepala Cakram', 'Piringan Cakram', 'Sayap Depan', 'Shock Breaker Depan', 'Sebeng Kiri', 'Sebeng Kanan', 'Sebeng Tengah', 'Penahan Lumpur',
+  'Sampan', 'Tangki Minyak', 'Tutup Tangki Minyak', 'Saring Hawa', 'Radiator', 'Pendingin / Vakum', 'As Overan Gigi', 'Pedal Overan Gigi', 'As Engkol', 'Block'];
+var FA_KONDISI_KANAN = ['Deksel', 'Injeksi / ICU', 'Belting + Roller', 'Karburator', 'Leher Karburator', 'Desiklos', 'Busi', 'Kepala Busi',
+  'Tempat Duduk', 'Swim Arm', 'Shock Breaker Belakang', 'Tutup Rantai', 'Tutup Gigi Tarik Depan', 'Tutup Baterai', 'Baterai', 'Cagak Tengah',
+  'Cagak Samping', 'Knalpot', 'Cover Knalpot', 'Pijakan Kaki Depan L / R', 'Pijakan Kaki Belakang L / R', 'Ban Lingkar Belakang', 'Body Cover Kanan',
+  'Body Cover Kiri', 'Less Body', 'Tutup Body Cover Belakang', 'Tiang Gawang', 'Lampu Belakang', 'Lampu Sen Belakang L / R', 'Sayap Belakang', 'Rem Belakang'];
+var FA_FOTO = ['Gesek Mesin', 'Gesek Rangka', 'Foto Sisi Depan', 'Foto Sisi Belakang', 'Foto Sisi Kanan', 'Foto Sisi Kiri', 'Dashboard / KM', 'Interior', 'Foto Pajak'];
+var FA_STNK = ['STNK - Depan', 'STNK - Belakang'];
+var FA_TTD = [['Diajukan Oleh', 'CMO'], ['Diperiksa Oleh', 'MH'], ['Disetujui Oleh', 'KC HEAD'],
+  ['Komite Appraisal', 'Used Vehicle & Dana Tunai Marketing Supervisor'], ['Komite Appraisal', 'Direksi/GM/SPV Area']];
+var faKond = {}, faImg = {}, faSiap = false;
+
+function faEl(id) { return document.getElementById(id); }
+function faAngka(v) { return parseInt(String(v == null ? '' : v).replace(/[^0-9]/g, ''), 10) || 0; }
+function faFmt(n) { return n ? Number(n).toLocaleString('id-ID') : ''; }
+function faRp(n) { return n ? 'Rp. ' + Number(n).toLocaleString('id-ID') : ''; }
+function faKetikRp(el) { var n = faAngka(el.value); el.value = faFmt(n); faHitung(); }
+function faPesan(kls, t) { var el = faEl('faPesan'); el.className = 'gb-pesan ' + kls; el.innerHTML = t; }
+function faTxt(id) { var el = faEl(id); return el ? String(el.value || '').trim() : ''; }
+function faTgl(v) { if (!v) return ''; var p = String(v).split('-'); return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : v; }
+
+function faMulai() {
+  if (!faSiap) {
+    faSiap = true;
+    /* kondisi */
+    var h = '';
+    FA_KONDISI_KIRI.concat(FA_KONDISI_KANAN).forEach(function (n, i) {
+      faKond[n] = { ada: true, ket: '' };
+      h += '<div class="fa-k" data-i="' + i + '" onclick="faTogKondisi(this, event)"><b>' + gbEsc(n) + '<span>ADA</span></b>' +
+        '<input placeholder="keterangan" onclick="event.stopPropagation()" oninput="faKond[this.parentNode.dataset.n].ket=this.value"></div>';
+    });
+    faEl('faKondisi').innerHTML = h;
+    faEl('faKondisi').querySelectorAll('.fa-k').forEach(function (el, i) { el.dataset.n = FA_KONDISI_KIRI.concat(FA_KONDISI_KANAN)[i]; });
+    /* perbaikan */
+    for (var i = 0; i < 3; i++) faTambahPerbaikan();
+    /* tanda tangan */
+    var simpan = {}; try { simpan = JSON.parse(localStorage.getItem('faTtdNama') || '{}') || {}; } catch (e) {}
+    faEl('faTtd').innerHTML = FA_TTD.map(function (t, k) {
+      var nama = simpan['n' + k] != null ? simpan['n' + k] : (k === 0 && typeof currentUser !== 'undefined' && currentUser ? currentUser.nama : '');
+      var jab = simpan['j' + k] != null ? simpan['j' + k] : t[1];
+      return '<div><small>' + gbEsc(t[0]) + '</small><input id="faTtdN' + k + '" placeholder="Nama" value="' + gbEsc(nama || '') + '">' +
+        '<input id="faTtdJ' + k + '" placeholder="Jabatan" value="' + gbEsc(jab) + '"></div>';
+    }).join('');
+    /* foto */
+    var slot = function (daftar, pre) {
+      return daftar.map(function (n, k) {
+        return '<label class="fa-slot" id="faSlot' + pre + k + '"><input type="file" accept="image/*" capture="environment" onchange="faPilihFoto(\'' + pre + k + '\', this)">' +
+          '<div class="fa-plus">+</div><button type="button" class="fa-putar" title="Putar 90°" onclick="event.preventDefault();event.stopPropagation();faPutar(\'' + pre + k + '\')">&#10227;</button><span>' + gbEsc(n) + '</span></label>';
+      }).join('');
+    };
+    faEl('faFoto').innerHTML = slot(FA_FOTO, 'f');
+    faEl('faStnk').innerHTML = slot(FA_STNK, 's');
+  }
+  if (typeof ucData !== 'undefined' && ucData) faIsiMerk();
+  else if (typeof ucMuatMrp === 'function') {
+    try { ucMuatMrp(); } catch (e) {}
+    var tunggu = 0, iv = setInterval(function () { tunggu++; if (ucData || tunggu > 40) { clearInterval(iv); faIsiMerk(); } }, 500);
+  }
+  faHitung();
+}
+
+function faTogKondisi(el) {
+  var k = faKond[el.dataset.n]; k.ada = !k.ada;
+  el.classList.toggle('tdk', !k.ada);
+  el.querySelector('span').innerText = k.ada ? 'ADA' : 'TIDAK';
+  if (!k.ada) setTimeout(function () { el.querySelector('input').focus(); }, 30);
+  faHitungTdk();
+}
+function faSemuaAda() {
+  faEl('faKondisi').querySelectorAll('.fa-k').forEach(function (el) {
+    var k = faKond[el.dataset.n]; k.ada = true; el.classList.remove('tdk'); el.querySelector('span').innerText = 'ADA';
+  });
+  faHitungTdk();
+}
+function faHitungTdk() {
+  var n = Object.keys(faKond).filter(function (k) { return !faKond[k].ada; }).length;
+  faEl('faJmlTdk').innerText = n ? n + ' item tidak ada / rusak' : '';
+}
+function faTambahPerbaikan() {
+  var tb = faEl('faTblPerbaikan').querySelector('tbody');
+  var tr = document.createElement('tr');
+  tr.innerHTML = '<td><input class="fa-part" placeholder="bagian"></td><td><input class="fa-rp fa-partrp" inputmode="numeric" oninput="faKetikRp(this)"></td>';
+  tb.appendChild(tr);
+}
+
+/* ---------- MRP (database yang sama dengan kalkulator Used Car) ---------- */
+function faIsiMerk() {
+  if (typeof ucData === 'undefined' || !ucData) { faEl('faMerk').innerHTML = '<option value="">MRP belum termuat</option>'; return; }
+  var lama = faEl('faMerk').value, merk = {};
+  ucData.rows.forEach(function (r) { merk[r.brand] = 1; });
+  faEl('faMerk').innerHTML = '<option value="">- pilih merk -</option>' + Object.keys(merk).sort().map(function (m) { return '<option>' + gbEsc(m) + '</option>'; }).join('');
+  if (lama) faEl('faMerk').value = lama;
+  faIsiTipe();
+}
+function faIsiTipe() {
+  var m = faEl('faMerk').value, lama = faEl('faTipe').value;
+  var tipe = (ucData ? ucData.rows : []).filter(function (r) { return r.brand === m; }).map(function (r) { return r.tipe; });
+  tipe = tipe.filter(function (t, i) { return tipe.indexOf(t) === i; }).sort();
+  faEl('faTipe').innerHTML = '<option value="">- pilih type -</option>' + tipe.map(function (t) { return '<option>' + gbEsc(t) + '</option>'; }).join('');
+  if (lama && tipe.indexOf(lama) >= 0) faEl('faTipe').value = lama;
+  faIsiTahun();
+}
+function faBaris() {
+  var m = faEl('faMerk').value, t = faEl('faTipe').value;
+  return (ucData ? ucData.rows : []).filter(function (r) { return r.brand === m && r.tipe === t; })[0] || null;
+}
+function faIsiTahun() {
+  var r = faBaris(), lama = faEl('faTahun').value;
+  var th = r ? Object.keys(r.harga).filter(function (y) { return r.harga[y] > 0; }).sort(function (a, b) { return b - a; }) : [];
+  faEl('faTahun').innerHTML = '<option value="">- tahun -</option>' + th.map(function (y) { return '<option>' + y + '</option>'; }).join('');
+  if (lama && th.indexOf(lama) >= 0) faEl('faTahun').value = lama;
+  faHargaDariMrp();
+}
+function faHargaDariMrp() {
+  var r = faBaris(), th = faEl('faTahun').value, info = faEl('faInfoMrp');
+  if (!r || !th || !r.harga[th]) { info.innerHTML = ''; faHitung(); return; }
+  var mrp = r.harga[th], otr = typeof ucBulatOtr === 'function' ? ucBulatOtr(+th, mrp) : mrp;
+  faEl('faHargaPasar').value = faFmt(otr);
+  info.innerHTML = '&#10004; dari database MRP' + (typeof ucSumber !== 'undefined' && ucSumber ? ' (' + gbEsc(ucSumber) + ')' : '') + (r.kategori ? ' &middot; ' + gbEsc(r.kategori) : '');
+  faHitung();
+}
+function faDariSimulasi() {
+  var u = typeof ucInfoUnit !== 'undefined' ? ucInfoUnit : null, h = typeof ucHasil !== 'undefined' ? ucHasil : null;
+  if (!u || !h) { faEl('faInfoSim').innerHTML = 'Belum ada simulasi Used Car yang valid. Hitung dulu di menu Used Car.'; return; }
+  faEl('faJenis').value = 'UC';
+  faEl('faMerk').value = u.baris.brand; faIsiTipe();
+  faEl('faTipe').value = u.baris.tipe; faIsiTahun();
+  faEl('faTahun').value = String(u.tahun); faHargaDariMrp();
+  faEl('faHargaPasar').value = faFmt(u.otr);
+  faEl('faDp').value = faFmt(u.inp.dp);
+  var kode = typeof ucMetode !== 'undefined' ? ucMetode : 'addb', a = h[kode] || {};
+  faEl('faMetode').value = String(kode).toUpperCase();
+  faEl('faTenor').value = h.bulan || '';
+  faEl('faAngsuran').value = faFmt(a.angsuran);
+  faEl('faPelunasan').value = faFmt(a.pencairan);
+  faEl('faInfoSim').innerHTML = '&#10004; terisi dari simulasi ' + gbEsc(u.baris.brand + ' ' + u.baris.tipe + ' ' + u.tahun);
+  faHitung();
+}
+
+function faHitung() {
+  var uc = faEl('faJenis').value === 'UC';
+  document.querySelectorAll('#tabAppraisal .fa-uc').forEach(function (e) { e.style.display = uc ? '' : 'none'; });
+  document.querySelectorAll('#tabAppraisal .fa-dt').forEach(function (e) { e.style.display = uc ? 'none' : ''; });
+  var harga = faAngka(faTxt('faHargaPasar'));
+  var perb = 0;
+  document.querySelectorAll('#faTblPerbaikan .fa-partrp').forEach(function (e) { perb += faAngka(e.value); });
+  perb += faAngka(faTxt('faPajakDenda')) + faAngka(faTxt('faSwdkllj')) + faAngka(faTxt('faBiayaAdm'));
+  faEl('faBiayaPerbaikan').value = faFmt(perb);
+  var dp = faAngka(faTxt('faDp'));
+  faEl('faInfoDp').innerHTML = harga && dp ? (dp / harga * 100).toFixed(2).replace('.', ',') + '% dari harga pasar' : '';
+  var maks = Math.floor(harga * 0.8);
+  faEl('faMaksPinjam').value = faFmt(maks);
+  var pj = faAngka(faTxt('faPinjam'));
+  faEl('faInfoPinjam').innerHTML = pj && harga ? (pj / harga * 100).toFixed(2).replace('.', ',') + '% dari harga pasar' +
+    (pj > maks ? ' &middot; <b style="color:#b91c1c">melebihi maks pinjaman</b>' : '') : '';
+}
+
+/* putar foto 90° searah jarum jam (foto STNK sering terambil tegak) */
+function faPutar(kunci) {
+  var g = faImg[kunci]; if (!g) return;
+  var im = new Image();
+  im.onload = function () {
+    var c = document.createElement('canvas'); c.width = im.height; c.height = im.width;
+    var x = c.getContext('2d'); x.translate(c.width, 0); x.rotate(Math.PI / 2); x.drawImage(im, 0, 0);
+    var url = c.toDataURL('image/jpeg', 0.8);
+    faImg[kunci] = { url: url, w: c.width, h: c.height };
+    var t = faEl('faSlot' + kunci).querySelector('img'); if (t) t.src = url;
+  };
+  im.src = g.url;
+}
+function faPilihFoto(kunci, inp) {
+  var f = inp.files && inp.files[0]; if (!f) return;
+  var slot = faEl('faSlot' + kunci);
+  gbKanvasGambar(f, kunci.charAt(0) === 's' ? 1700 : 1300).then(function (c) {
+    var url = c.toDataURL('image/jpeg', 0.72);
+    faImg[kunci] = { url: url, w: c.width, h: c.height };
+    var im = slot.querySelector('img'); if (!im) { im = document.createElement('img'); slot.insertBefore(im, slot.firstChild); }
+    im.src = url; slot.classList.add('isi');
+  }).catch(function (e) { faPesan('bahaya', 'Foto tidak bisa dibuka: ' + gbEsc(e.message || e)); });
+}
+
+/* ---------- PDF ---------- */
+function faData() {
+  var g = function (id) { return faTxt(id); };
+  var perbaikan = [];
+  faEl('faTblPerbaikan').querySelectorAll('tbody tr').forEach(function (tr) {
+    var b = tr.querySelector('.fa-part').value.trim(), n = faAngka(tr.querySelector('.fa-partrp').value);
+    if (b || n) perbaikan.push([b, n]);
+  });
+  var ttd = FA_TTD.map(function (t, k) { return { judul: t[0], nama: g('faTtdN' + k), jabatan: g('faTtdJ' + k) }; });
+  return {
+    jenis: g('faJenis'), status: g('faStatus'), nama: g('faNama'), pekerjaan: g('faPekerjaan'), penghasilan: g('faPenghasilan'), sumber: g('faSumber'),
+    merk: g('faMerk'), tipe: g('faTipe'), tahun: g('faTahun'), warna: g('faWarna'), rangka: g('faRangka').toUpperCase(), mesin: g('faMesin').toUpperCase(),
+    nopol: g('faNopol').toUpperCase(), namaStnk: g('faNamaStnk'), berlakuStnk: faTgl(g('faBerlakuStnk')), berlakuPajak: faTgl(g('faBerlakuPajak')),
+    bpkb: g('faBpkb').toUpperCase(), kwitansi: g('faKwitansi'), faktur: g('faFaktur'), srut: g('faSrut'),
+    perbaikan: perbaikan, pajakDenda: faAngka(g('faPajakDenda')), swdkllj: faAngka(g('faSwdkllj')), biayaAdm: faAngka(g('faBiayaAdm')),
+    hargaPasar: faAngka(g('faHargaPasar')), biayaPerbaikan: faAngka(g('faBiayaPerbaikan')), dp: faAngka(g('faDp')), metode: g('faMetode'),
+    maksPinjam: faAngka(g('faMaksPinjam')), pinjam: faAngka(g('faPinjam')), tenor: faAngka(g('faTenor')), angsuran: faAngka(g('faAngsuran')),
+    pelunasan: faAngka(g('faPelunasan')), ttd: ttd
+  };
+}
+function faCek(d) {
+  var kurang = [];
+  if (!d.nama) kurang.push('nama nasabah');
+  if (!d.merk || !d.tipe || !d.tahun) kurang.push('merk / type / tahun');
+  if (!d.rangka) kurang.push('no. rangka');
+  if (!d.nopol) kurang.push('nomor polisi');
+  if (!d.hargaPasar) kurang.push('harga pasar');
+  if (d.jenis === 'DT' && !d.pinjam) kurang.push('pinjaman dimohon');
+  if (d.jenis === 'DT' && d.pinjam > d.maksPinjam) kurang.push('pinjaman dimohon melebihi maks pinjaman (80% harga pasar)');
+  return kurang;
+}
+
+function faGambarPdf(d, info) {
+  var jsPDF = window.jspdf.jsPDF;
+  var doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  var W = 210, M = 9, hitam = [20, 20, 20], gelap = [15, 37, 64], hijau = [31, 122, 77];
+  var kepala = { fillColor: [0, 0, 0], textColor: 255, fontStyle: 'bold', fontSize: 6.6, cellPadding: 0.6, halign: 'center' };
+  var badan = { font: 'helvetica', fontSize: 6.6, cellPadding: 0.55, lineColor: [0, 0, 0], lineWidth: 0.12, textColor: hitam, overflow: 'ellipsize' };
+
+  /* judul */
+  doc.setFillColor(0, 0, 0); doc.rect(M, 7, W - 2 * M, 8, 'F');
+  doc.setTextColor(255); doc.setFont('helvetica', 'bold'); doc.setFontSize(12.5);
+  doc.text('FORM APPRAISAL OBJEK JAMINAN (R4)', W / 2, 12.6, { align: 'center' });
+  /* baris info */
+  doc.setTextColor(20); doc.setFontSize(7.4); doc.setFont('helvetica', 'normal');
+  var info1 = '• ' + d.status + '     • Nama : ' + d.nama.toUpperCase() + '     • Pekerjaan : ' + (d.pekerjaan || '-');
+  var info2 = '• Penghasilan : ' + (d.penghasilan || '-') + '     • Sumber Order : ' + (d.sumber || '-') + '     • Jenis : ' + (d.jenis === 'DT' ? 'Dana Tunai' : 'Used Car');
+  doc.text(doc.splitTextToSize(info1, 128)[0], M, 20); doc.text(doc.splitTextToSize(info2, 128)[0], M, 24);
+  /* stempel terverifikasi */
+  doc.setDrawColor.apply(doc, hijau); doc.setLineWidth(0.6); doc.roundedRect(W - M - 58, 17, 58, 13.5, 1.5, 1.5, 'S');
+  doc.setTextColor.apply(doc, hijau); doc.setFont('helvetica', 'bold'); doc.setFontSize(8.6);
+  doc.text('TERVERIFIKASI SISTEM TOOLS CMD', W - M - 29, 21, { align: 'center' });
+  doc.setFontSize(8); doc.text(info.id, W - M - 29, 25, { align: 'center' });
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(6.2); doc.text('Dicetak ' + info.waktu, W - M - 29, 28.6, { align: 'center' });
+  doc.setTextColor(20);
+
+  var judul = function (t, y) { doc.setFont('helvetica', 'bold'); doc.setFontSize(8); doc.text(t, M, y); doc.setLineWidth(0.25); doc.setDrawColor(0); doc.line(M, y + 0.8, M + doc.getTextWidth(t), y + 0.8); };
+
+  /* 1. objek jaminan */
+  judul('1. OBJEK JAMINAN UNIT KENDARAAN RODA 4', 34);
+  var kiri = [['Merk', d.merk], ['Type', d.tipe], ['Tahun', d.tahun], ['Warna', d.warna], ['No. Rangka', d.rangka], ['No. Mesin', d.mesin], ['Nomor Polisi', d.nopol]];
+  var kanan = [['Nama STNK', d.namaStnk], ['Masa Berlaku STNK', d.berlakuStnk], ['Masa Berlaku Pajak', d.berlakuPajak], ['No BPKB', d.bpkb],
+    ['Kwitansi Kosong', d.kwitansi], ['Faktur', d.faktur], ['S.R.U.T (unit 2019 ke atas)', d.srut]];
+  doc.autoTable({
+    startY: 36, margin: { left: M, right: M }, theme: 'grid',
+    styles: Object.assign({}, badan, { fontSize: 7, cellPadding: 0.75 }),
+    body: kiri.map(function (r, i) { return [r[0], ': ' + (r[1] || ''), kanan[i][0], ': ' + (kanan[i][1] || '')]; }),
+    columnStyles: { 0: { cellWidth: 24 }, 1: { cellWidth: 72, fontStyle: 'bold' }, 2: { cellWidth: 36 }, 3: { fontStyle: 'bold' } },
+    tableLineWidth: 0.2, tableLineColor: 0,
+    didParseCell: function (c) { c.cell.styles.lineWidth = 0; }
+  });
+  var y = doc.lastAutoTable.finalY + 4;
+
+  /* 2. kondisi */
+  judul('2. KONDISI OBJEK JAMINAN', y); y += 1.5;
+  var v = function (n) { var k = faKond[n] || { ada: true, ket: '' }; return [n, k.ada ? 'V' : '', k.ada ? '' : 'V', k.ket || '']; };
+  var rowsK = FA_KONDISI_KIRI.map(function (n, i) { return v(n).concat(v(FA_KONDISI_KANAN[i])); });
+  doc.autoTable({
+    startY: y, margin: { left: M, right: M }, theme: 'grid', styles: Object.assign({}, badan, { fontSize: 5.9, cellPadding: 0.32 }), headStyles: kepala,
+    head: [['Kondisi Unit', 'Ada', 'Tdk', 'Keterangan', 'Kondisi Unit', 'Ada', 'Tdk', 'Keterangan']],
+    body: rowsK,
+    columnStyles: { 0: { cellWidth: 33 }, 1: { cellWidth: 7, halign: 'center' }, 2: { cellWidth: 7, halign: 'center' }, 3: { cellWidth: 49 },
+                    4: { cellWidth: 33 }, 5: { cellWidth: 7, halign: 'center' }, 6: { cellWidth: 7, halign: 'center' }, 7: {} },
+    didParseCell: function (c) { if (c.section === 'body' && (c.column.index === 2 || c.column.index === 6) && c.cell.raw === 'V') c.cell.styles.textColor = [185, 28, 28]; }
+  });
+  y = doc.lastAutoTable.finalY + 4;
+
+  /* 3. estimasi biaya (dua tabel berdampingan) */
+  judul('3. ESTIMASI BIAYA', y); y += 1.5;
+  var lebar = (W - 2 * M - 4) / 2;
+  var perb = d.perbaikan.length ? d.perbaikan : [['', 0]];
+  var totPerb = perb.reduce(function (s, r) { return s + (r[1] || 0); }, 0);
+  doc.autoTable({
+    startY: y, margin: { left: M, right: W - M - lebar }, tableWidth: lebar, theme: 'grid', styles: badan, headStyles: kepala,
+    head: [['Perbaikan Kendaraan - Bagian Sparepart', 'Est. Harga Cabang', 'Est. Team Appraisal']],
+    body: perb.map(function (r) { return [r[0], faRp(r[1]), '']; }).concat([[{ content: 'Total Biaya', styles: { fontStyle: 'bold', fillColor: [0, 0, 0], textColor: 255 } }, faRp(totPerb), '']])
+  });
+  var yKiri = doc.lastAutoTable.finalY;
+  var totPj = d.pajakDenda + d.swdkllj + d.biayaAdm;
+  doc.autoTable({
+    startY: y, margin: { left: M + lebar + 4, right: M }, tableWidth: lebar, theme: 'grid', styles: badan, headStyles: kepala,
+    head: [['Perpanjangan Pajak & STNK', 'Est. Biaya Cabang', 'Est. Team Appraisal']],
+    body: [['Pajak + Denda', faRp(d.pajakDenda), ''], ['SWDKLLJ + Denda', faRp(d.swdkllj), ''], ['Biaya ADM', faRp(d.biayaAdm), ''],
+      [{ content: 'Total Biaya', styles: { fontStyle: 'bold', fillColor: [0, 0, 0], textColor: 255 } }, faRp(totPj), '']]
+  });
+  y = Math.max(yKiri, doc.lastAutoTable.finalY) + 4;
+
+  /* 4. pricing */
+  judul('4. PRICING', y); y += 1.5;
+  var pct = function (a, b) { return b ? ' (' + (a / b * 100).toFixed(2).replace('.', ',') + '%)' : ''; };
+  var harga = [['Harga Pasar', faRp(d.hargaPasar)], ['Biaya Perbaikan Kendaraan', faRp(d.biayaPerbaikan)]];
+  if (d.jenis === 'DT') {
+    harga.push(['Harga Pasar setelah dikurangi biaya', faRp(Math.max(0, d.hargaPasar - d.biayaPerbaikan))]);
+    harga.push(['Maks Pinjaman', faRp(d.maksPinjam) + ' (80%)']);
+    harga.push(['Pinjaman Dimohon', faRp(d.pinjam) + pct(d.pinjam, d.hargaPasar)]);
+  } else {
+    harga.push(['DP / Uang Muka', faRp(d.dp) + pct(d.dp, d.hargaPasar) + (d.dp ? ' ' + d.metode : '')]);
+  }
+  harga.push(['Tenor', d.tenor ? d.tenor + ' Bulan' : '']);
+  harga.push(['Angsuran', faRp(d.angsuran)]);
+  if (d.jenis !== 'DT') harga.push(['Pelunasan Dealer', faRp(d.pelunasan)]);
+  doc.autoTable({
+    startY: y, margin: { left: M, right: M }, theme: 'grid', styles: Object.assign({}, badan, { fontSize: 7 }), headStyles: kepala,
+    head: [['Keterangan', 'Pengajuan Cabang', 'Nilai Appraisal']],
+    body: harga.map(function (r) { return [r[0], r[1], '']; }),
+    columnStyles: { 0: { cellWidth: 62, fontStyle: 'bold' }, 1: { cellWidth: 70 } }
+  });
+  y = doc.lastAutoTable.finalY + 4;
+
+  /* tabel tanda tangan */
+  var tglCetak = info.tanggal;
+  var col = function (f) { return d.ttd.map(function (t) { return f(t); }); };
+  doc.autoTable({
+    startY: y, margin: { left: M, right: M }, theme: 'grid', styles: Object.assign({}, badan, { fontSize: 6.8, halign: 'center', valign: 'middle', overflow: 'linebreak' }),
+    headStyles: kepala,
+    head: [['', 'Diajukan Oleh', 'Diperiksa Oleh', 'Disetujui Oleh', { content: 'Komite Appraisal', colSpan: 2 }]],
+    body: [
+      ['Tanda\nTangan'].concat(col(function () { return ''; })),
+      ['Nama'].concat(col(function (t) { return (t.nama || '').toUpperCase(); })),
+      ['Jabatan'].concat(col(function (t) { return t.jabatan || ''; })),
+      ['Tanggal'].concat(col(function (t) { return t.nama ? tglCetak : ''; }))
+    ],
+    columnStyles: { 0: { cellWidth: 17, fillColor: [0, 0, 0], textColor: 255, fontStyle: 'bold' } },
+    didParseCell: function (c) {
+      if (c.section === 'body' && c.row.index === 0) c.cell.styles.minCellHeight = 17;
+      if (c.section === 'body' && c.row.index === 1 && c.column.index > 0) c.cell.styles.fontStyle = 'bold';
+    }
+  });
+
+  /* hal 2: 9 foto */
+  var kotakFoto = function (img, label, x, y0, w, h) {
+    doc.setFillColor(0, 0, 0); doc.rect(x, y0, w, 5, 'F');
+    doc.setTextColor(255); doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5); doc.text(label, x + w / 2, y0 + 3.5, { align: 'center' });
+    doc.setDrawColor(0); doc.setLineWidth(0.2); doc.rect(x, y0, w, h, 'S');
+    var bx = x + 1, by = y0 + 6, bw = w - 2, bh = h - 7;
+    if (!img) { doc.setTextColor(150); doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.text('(tidak ada foto)', x + w / 2, by + bh / 2, { align: 'center' }); return; }
+    var sk = Math.min(bw / img.w, bh / img.h), iw = img.w * sk, ih = img.h * sk;
+    doc.addImage(img.url, 'JPEG', bx + (bw - iw) / 2, by + (bh - ih) / 2, iw, ih, undefined, 'FAST');
+  };
+  doc.addPage();
+  doc.setTextColor(20); doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
+  doc.text('LAMPIRAN FOTO OBJEK JAMINAN  -  ' + d.nopol + '  -  ' + d.nama.toUpperCase(), W / 2, 11, { align: 'center' });
+  var gx = 3, gw = (W - 2 * M - 2 * gx) / 3, gh = 86;
+  FA_FOTO.forEach(function (n, i) {
+    kotakFoto(faImg['f' + i], n, M + (i % 3) * (gw + gx), 15 + Math.floor(i / 3) * (gh + 3), gw, gh);
+  });
+  /* hal 3: STNK */
+  doc.addPage();
+  doc.setTextColor(20); doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
+  doc.text('FOTO STNK  -  ' + d.nopol, W / 2, 11, { align: 'center' });
+  FA_STNK.forEach(function (n, i) { kotakFoto(faImg['s' + i], n, M, 15 + i * 136, W - 2 * M, 132); });
+
+  /* kaki setiap halaman: jejak verifikasi */
+  var n = doc.getNumberOfPages();
+  for (var p = 1; p <= n; p++) {
+    doc.setPage(p);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(6.3); doc.setTextColor.apply(doc, hijau);
+    doc.text('TERVERIFIKASI SISTEM TOOLS CMD  -  ' + info.id + '  -  dicetak ' + info.waktu + ' oleh ' + info.oleh, M, 293);
+    doc.text('hal ' + p + '/' + n, W - M, 293, { align: 'right' });
+  }
+  doc.setProperties({ title: 'Form Appraisal ' + d.nopol + ' - ' + info.id, subject: 'CMDAPR1:' + JSON.stringify({ id: info.id, rangka: d.rangka, tahun: d.tahun, hargaPasar: d.hargaPasar, pinjaman: d.jenis === 'DT' ? d.pinjam : 0, dp: d.dp }), creator: 'TOOLS CMD' });
+  return doc;
+}
+
+function faBuatPdf() {
+  var d = faData(), kurang = faCek(d);
+  if (kurang.length) { faPesan('bahaya', 'Lengkapi dulu: ' + kurang.map(gbEsc).join(', ') + '.'); return; }
+  var adaFoto = FA_FOTO.filter(function (n, i) { return faImg['f' + i]; }).length, adaStnk = faImg.s0 || faImg.s1;
+  if ((!adaFoto || !adaStnk) && !confirm((!adaFoto ? 'Belum ada foto lampiran. ' : '') + (!adaStnk ? 'Foto STNK belum ada. ' : '') + 'Tetap buat PDF?')) return;
+  try { var simpan = {}; d.ttd.forEach(function (t, k) { simpan['n' + k] = t.nama; simpan['j' + k] = t.jabatan; }); localStorage.setItem('faTtdNama', JSON.stringify(simpan)); } catch (e) {}
+  var btn = faEl('faBtnPdf'); btn.disabled = true;
+  faPesan('info', 'Menyusun PDF&hellip;');
+  var kini = new Date();
+  var info = {
+    oleh: (typeof namaPencetak === 'function' && namaPencetak()) || 'pengguna',
+    waktu: kini.toLocaleString('id-ID', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+    tanggal: ('0' + kini.getDate()).slice(-2) + '/' + ('0' + (kini.getMonth() + 1)).slice(-2) + '/' + kini.getFullYear()
+  };
+  gbBuatId([d.nopol, d.rangka, d.nama, String(d.hargaPasar)]).then(function (id) {
+    info.id = id;
+    var doc = faGambarPdf(d, info);
+    var nama = d.nama.replace(/[^A-Za-z0-9]+/g, '_').replace(/^_|_$/g, '');
+    var namaFile = 'Appraisal_' + gbRapat(d.nopol) + (nama ? '_' + nama : '') + '_' + id + '.pdf';
+    doc.save(namaFile);
+    btn.disabled = false;
+    var ok = '&#10004; PDF terunduh: <b>' + gbEsc(namaFile) + '</b><br>ID verifikasi: <b>' + gbEsc(id) + '</b>';
+    var adaServer = window.google && google.script && google.script.run && typeof google.script.run.simpanAppraisal === 'function';
+    if (!adaServer) { faPesan('hati', ok + '<br>Belum tersimpan ke Drive (fungsi simpanAppraisal belum dipasang).'); return; }
+    faPesan('sukses', ok + '<br>Menyimpan ke Google Drive&hellip;');
+    var b64 = doc.output('datauristring').split(',')[1];
+    google.script.run
+      .withSuccessHandler(function (r) {
+        faPesan('sukses', ok + '<br>&#10004; Tersimpan di Drive &amp; tercatat di sheet LOG APPRAISAL' + (r && r.url ? ' &middot; <a href="' + gbEsc(r.url) + '" target="_blank" rel="noopener">buka file</a>' : '') + '.');
+      })
+      .withFailureHandler(function (e) { faPesan('hati', ok + '<br>Gagal menyimpan ke Drive: ' + gbEsc(e && e.message ? e.message : e) + '. PDF di perangkat tetap aman.'); })
+      .simpanAppraisal({
+        id: id, oleh: info.oleh, jenis: d.jenis === 'DT' ? 'Dana Tunai' : 'Used Car', nama: d.nama, nopol: d.nopol,
+        unit: d.merk + ' ' + d.tipe, tahun: d.tahun, rangka: d.rangka, hargaPasar: d.hargaPasar,
+        dp: d.dp, pinjaman: d.pinjam, tenor: d.tenor, angsuran: d.angsuran, namaFile: namaFile
+      }, b64);
+  }).catch(function (e) { btn.disabled = false; faPesan('bahaya', 'Gagal membuat PDF: ' + gbEsc(e && e.message ? e.message : e)); });
+}
+(function () { if (typeof JUDUL_TAB !== 'undefined') JUDUL_TAB.tabAppraisal = ['Form Appraisal', 'Isi form appraisal, lampiran foto & STNK, jadi 1 PDF terverifikasi']; })();
+
 (function () {
   if (typeof JUDUL_TAB !== 'undefined') JUDUL_TAB.tabGabungBerkas = ['Gabung Berkas', 'Cocokkan appraiser, STNK & simulasi, lalu gabung jadi satu PDF'];
 })();
@@ -19525,12 +20114,12 @@ function gbGabung() {
     tabDashboard: 'Beranda', tabDataTarikan: 'Tarikan', tabListHarga: 'Harga',
     tabGrafik: 'Grafik', tabTarikanJualan: 'Tren Tarik', tabLor: 'LOR',
     tabAging: 'Aging', tabLapMeeting: 'Meeting', tabStockAyda: 'AYDA', tabPembiayaan: 'Dealer', tabPbDatun: 'Datun', tabTac: 'TAC',
-    tabSorumBekas: 'Kalkulator', tabDanaTunai: 'Dana Tunai', tabMotorBekas: 'Motor', tabGabungBerkas: 'Gabung',
+    tabSorumBekas: 'Kalkulator', tabDanaTunai: 'Dana Tunai', tabMotorBekas: 'Motor', tabGabungBerkas: 'Gabung', tabAppraisal: 'Appraisal',
     tabKpiCmo: 'KPI CMO', tabBastGudang: 'BAST', tabKelengkapan: 'Kelengkapan', tabHargaAyda: 'Harga AYDA', tabTipeTahun: 'Tipe', tabKelolaUser: 'Pengguna'
   };
   var UTAMA = ['tabDashboard', 'tabSorumBekas', 'tabDanaTunai', 'tabLapMeeting'];
   /* label menu bawah untuk akun CMO / CMC */
-  var LABEL_CMO = { tabKpiCmo: 'KPI CMO', tabSorumBekas: 'Used Car', tabDanaTunai: 'Datun', tabMotorBekas: 'Motor', tabPbDatun: 'Pembiayaan', tabGabungBerkas: 'Gabung' };
+  var LABEL_CMO = { tabKpiCmo: 'KPI CMO', tabSorumBekas: 'Used Car', tabDanaTunai: 'Datun', tabMotorBekas: 'Motor', tabPbDatun: 'Pembiayaan', tabGabungBerkas: 'Gabung', tabAppraisal: 'Appraisal' };
   var IKON_LAIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">' +
     '<circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>';
   var nav, sheet, latar, daftarBar = [];
@@ -26211,6 +26800,7 @@ body.dark #tabTac table.tac-aturan td.kode, body.cmd #tabTac table.tac-aturan td
       var r = asli.apply(this, arguments);
       setTimeout(function () { var t = document.getElementById(id); if (t) tambah(t); }, 250);
       if (id === 'tabGabungBerkas') { try { gbSiapkanOcr(); gbTtdSinkron(gbTtdAkun !== 'ok'); } catch (e) {} }
+      if (id === 'tabAppraisal') { try { faMulai(); } catch (e) { console.error(e); } }
       return r;
     };
     window.switchTab.__cg = true;
