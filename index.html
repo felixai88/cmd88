@@ -2202,6 +2202,7 @@ body.cmo .mnav-lbl { max-width: 100%; overflow: hidden; text-overflow: ellipsis;
 body.cmo .mnav button.aktif { color: #1d4ed8; }
 body.cmo .mnav button.aktif .mnav-ikon { background: #e8efff; }
 body.cmo .mnav button:active .mnav-ikon { transform: scale(.94); }
+@media (max-width: 420px) { body.cmo .mnav button { font-size: 10px; } body.cmo .mnav-ikon { width: 44px; } }
 
 /* --- CMO / CMC: lembar "Lainnya" juga harus bisa dibuka di laptop (dulu hanya aktif di layar HP) --- */
 body.cmo .msheet-bd { display: block; position: fixed; inset: 0; background: rgba(3,10,22,.5); z-index: 410;
@@ -19204,7 +19205,7 @@ function gbGabung() {
   };
   var UTAMA = ['tabDashboard', 'tabSorumBekas', 'tabDanaTunai', 'tabLapMeeting'];
   /* label menu bawah untuk akun CMO / CMC */
-  var LABEL_CMO = { tabKpiCmo: 'KPI CMO', tabSorumBekas: 'Used Car', tabDanaTunai: 'Dana Tunai', tabMotorBekas: 'Motor Bekas', tabPbDatun: 'Pembiayaan', tabGabungBerkas: 'Gabung' };
+  var LABEL_CMO = { tabKpiCmo: 'KPI CMO', tabSorumBekas: 'Used Car', tabDanaTunai: 'Datun', tabMotorBekas: 'Motor', tabPbDatun: 'Pembiayaan', tabGabungBerkas: 'Gabung' };
   var IKON_LAIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">' +
     '<circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>';
   var nav, sheet, latar, daftarBar = [];
@@ -19293,7 +19294,8 @@ function gbGabung() {
       nav.appendChild(t);
       daftarBar.push(id);
     });
-    if (tombol.length > bar.length) {
+    /* "Lainnya" selalu ada: rekap semua menu + pilihan tampilan */
+    if (true) {
       var lain = document.createElement('button');
       lain.type = 'button';
       lain.className = 'mnav-lain';
