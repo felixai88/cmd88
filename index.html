@@ -20,10 +20,10 @@
   if (window.google && google.script && google.script.run) return;   /* sedang jalan di Apps Script */
 
   /* Link Web App Apps Script (deploy yang ujungnya /exec) */
-  var API_URL = "https://script.google.com/macros/s/AKfycbzhwFjxQ6WszXdNcm-ThTIk4_W0CAOA51qYF6h_ym27OZP5YZ0PGxUCfsC06E0dSLYkoA/exec";
+  var API_URL = "https://script.google.com/macros/s/AKfycbwFDdE7jPA3MGN1S_S3m3FinmLgCneIBG3Jj10qEe2AQUpPByZK5ED_uM4vE7UpE6z3gw/exec";
 
   /* fungsi server yang boleh dipanggil — harus sama dengan daftar di Api.gs */
-  var FUNGSI = ["loginUser", "cekSesi", "logoutUser", "gantiPassword", "daftarUser", "tambahUser", "resetPasswordUser", "ubahStatusUser", "fetchSheetCSV", "fetchJualanCSV", "fetchTarikanCSV", "fetchLapMeetingCSV", "fetchTarikanAllCSV", "fetchStockTahunan", "bacaSheetAman", "getPeriodeMrp", "getPeriodeMrpSorum", "getMrpSorumBekas", "getMatriksRangka", "bacaStnk", "bacaAppraisal", "catatVerifikasi", "fetchHargaAyda", "fetchSisaStockAyda", "simpanHargaTerjual", "getDataPembiayaan", "bacaTacDealer", "ajukanPengajuanHarga", "ambilBerkasDrive", "fetchKelengkapanEstimasi", "fetchPengajuanHarga", "simpanBastLengkap", "simpanGabunganEstimasi", "simpanKeteranganEstimasi", "simpanMemoHarga", "simpanMemoMassal", "unggahBerkasEstimasi", "getDaftarCabang", "fetchKpiCmoList", "fetchKpiCmoDetail", "simpanAktivitas", "simpanProspek", "updateStatusProspek", "fetchAktivitasList", "fetchProspekList", "fetchKpiCmoRekap", "ttdAmbil", "ttdSimpan", "ttdSimpanPosisi", "ttdHapus", "simpanAppraisal", "faNamaAmbil", "faNamaSimpan"];
+  var FUNGSI = ["loginUser", "cekSesi", "logoutUser", "gantiPassword", "daftarUser", "tambahUser", "resetPasswordUser", "ubahStatusUser", "fetchSheetCSV", "fetchJualanCSV", "fetchTarikanCSV", "fetchLapMeetingCSV", "fetchTarikanAllCSV", "fetchStockTahunan", "bacaSheetAman", "getPeriodeMrp", "getPeriodeMrpSorum", "getMrpSorumBekas", "getMatriksRangka", "bacaStnk", "bacaAppraisal", "catatVerifikasi", "fetchHargaAyda", "fetchSisaStockAyda", "fetchStockLive", "simpanHargaTerjual", "getDataPembiayaan", "bacaTacDealer", "ajukanPengajuanHarga", "ambilBerkasDrive", "fetchKelengkapanEstimasi", "fetchPengajuanHarga", "simpanBastLengkap", "simpanGabunganEstimasi", "simpanKeteranganEstimasi", "simpanMemoHarga", "simpanMemoMassal", "unggahBerkasEstimasi", "getDaftarCabang", "fetchKpiCmoList", "fetchKpiCmoDetail", "simpanAktivitas", "simpanProspek", "updateStatusProspek", "fetchAktivitasList", "fetchProspekList", "fetchKpiCmoRekap", "ttdAmbil", "ttdSimpan", "ttdSimpanPosisi", "ttdHapus", "simpanAppraisal", "faNamaAmbil", "faNamaSimpan"];
 
   function panggil(nama, args, ok, gagal, obj) {
     fetch(API_URL, {
@@ -2670,6 +2670,16 @@ body.cmd .pi-chip button.aktif { background: #e2432c; border-color: #e2432c; }
   .peta-gambar.pi-wadah .pi-full { display: none; }
   .peta-gambar.pi-wadah .pi-crop { display: block; }
 }
+.peta-daftar li { align-items: flex-start; }
+.peta-daftar li > i { margin-top: 4px; flex: none; }
+.peta-daftar .peta-kota { display: block; font-size: 10.5px; font-weight: 600; color: #64748b; line-height: 1.45; margin-top: 1px; }
+body.dark .peta-daftar .peta-kota { color: #94a3b8; }
+body.cmd .peta-daftar .peta-kota { color: #b89c86; }
+.pr-kec .pr-dot { position: absolute; left: -4px; top: -4px; width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid #fff; box-shadow: 0 0 0 1px rgba(15,37,64,.35); }
+.pr-kec .pr-lbl { position: absolute; left: 7px; top: -8px; white-space: nowrap; font: 700 10px/1 system-ui, sans-serif; color: #0f2540;
+  text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 3px #fff; display: none; pointer-events: none; }
+.pi-peta.pr-zoom-kota .pr-kec .pr-lbl { display: block; }
+body.dark .pr-kec .pr-lbl, body.cmd .pr-kec .pr-lbl { color: #f1f5f9; text-shadow: 0 0 3px #0b1626, 0 0 3px #0b1626; }
 .pr-pin .pr-nama small { display: block; font-size: 9px; font-weight: 600; opacity: .72; margin-top: 2px; letter-spacing: .2px; }
 body.cmd .pr-pin .pr-nama { background: #e2432c; }
 body.dark .peta-real, body.cmd .peta-real { border-color: rgba(255,255,255,.12); background: #1a2333; }
@@ -3958,11 +3968,11 @@ window.addEventListener('load', function () { setTimeout(function () { if (!cmdS
           <span class="peta-pill"></span>
           <h3>SUMATERA<br>BAGIAN UTARA</h3>
           <ul class="peta-daftar">
-            <li><i class="pi-aceh-pin"></i>Aceh</li>
-            <li><i class="pi-sumut-pin"></i>Sumatera Utara</li>
-            <li><i class="pi-riau-pin"></i>Riau</li>
-            <li><i class="pi-kepri-pin"></i>Kepulauan Riau</li>
-            <li><i class="pi-sumbar-pin"></i>Sumatera Barat &mdash; Padang</li>
+            <li><i class="pi-aceh-pin"></i><span>Aceh<small class="peta-kota">Banda Aceh &middot; Langsa &middot; Lhokseumawe &middot; Bireuen &middot; Sigli &middot; Takengon &middot; Kutacane &middot; Blangkejeren &middot; Subulussalam &middot; Tapaktuan &middot; Simeulue &middot; Blangpidie &middot; Meulaboh &middot; Kuala Simpang</small></span></li>
+            <li><i class="pi-sumut-pin"></i><span>Sumatera Utara<small class="peta-kota">Medan &middot; Pematang Siantar &middot; Padang Sidempuan &middot; Rantau Prapat &middot; Kisaran &middot; Binjai</small></span></li>
+            <li><i class="pi-riau-pin"></i><span>Riau<small class="peta-kota">Pekanbaru &middot; Flamboyan &middot; Perawang &middot; Pangkalan Kerinci &middot; Sorek &middot; Air Molek &middot; Pematang Reba &middot; Duri &middot; Dumai &middot; Bagan Batu</small></span></li>
+            <li><i class="pi-kepri-pin"></i><span>Kepulauan Riau<small class="peta-kota">Batam</small></span></li>
+            <li><i class="pi-sumbar-pin"></i><span>Sumatera Barat<small class="peta-kota">Padang</small></span></li>
           </ul>
         </div>
 
@@ -4000,6 +4010,7 @@ window.addEventListener('load', function () { setTimeout(function () { if (!cmdS
             <option value="">R2 &amp; R4</option>
             <option value="R2">R2</option>
             <option value="R4">R4</option>
+            <option value="LAINNYA">Lainnya (bukan R2/R4)</option>
           </select>
         </div>
         <div class="dk-chipbar" id="dkStatus">Memuat data...</div>
@@ -8032,8 +8043,7 @@ function setStatus(message, type) {
 function loadData() {
   setStatus("Mengambil data dari Google Sheets...", "loading");
 
-  google.script.run
-    .withSuccessHandler(function(rows) {
+  const _okData = function(rows) {
       try {
         const semuaBaris = parseRowsSmart(rows);
         if (semuaBaris.length === 0) {
@@ -8089,11 +8099,36 @@ function loadData() {
       } catch (err) {
         setStatus("Gagal memproses data: " + err.message, "error");
       }
-    })
+  };
+  const _gagalData = function(err) {
+    setStatus("Gagal mengambil data: " + err.message, "error");
+  };
+  /* Sumber stock = blok terbaru sheet DATABASE STOCK (stock berjalan). Bila fungsi belum dipasang -> pakai sheet lama. */
+  const _lencanaSumber = function(ok, jumlah, pesan) {
+    try {
+      let el = document.getElementById("sumberStockBadge");
+      if (!el) {
+        el = document.createElement("div"); el.id = "sumberStockBadge";
+        el.style.cssText = "position:fixed;right:12px;bottom:12px;z-index:99999;max-width:360px;padding:8px 12px;border-radius:10px;font:600 12px/1.4 sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.2);cursor:pointer;";
+        el.title = "Klik untuk menutup"; el.onclick = function() { el.remove(); };
+        document.body.appendChild(el);
+      }
+      el.style.background = ok ? "#dcfce7" : "#fee2e2"; el.style.color = ok ? "#166534" : "#991b1b";
+      el.textContent = ok ? ("Sumber stock: DATABASE STOCK (" + jumlah + " unit)") : ("Sumber stock: SHEET LAMA (" + jumlah + " unit). fetchStockLive gagal: " + pesan);
+      if (ok) setTimeout(function() { if (el && el.parentNode) el.remove(); }, 8000);
+    } catch (e) {}
+  };
+  google.script.run
+    .withSuccessHandler(function(rows) { _lencanaSumber(true, (rows ? rows.length - 1 : 0)); _okData(rows); })
     .withFailureHandler(function(err) {
-      setStatus("Gagal mengambil data: " + err.message, "error");
+      const pesan = err && err.message ? err.message : String(err);
+      console.warn("fetchStockLive gagal, pakai sheet lama:", pesan);
+      google.script.run
+        .withSuccessHandler(function(rows) { _lencanaSumber(false, (rows ? rows.length - 1 : 0), pesan); _okData(rows); })
+        .withFailureHandler(_gagalData)
+        .fetchSheetCSV();
     })
-    .fetchSheetCSV();
+    .fetchStockLive();
 
   loadTarikanJualanData();
   loadTarikanAllData();
@@ -8171,6 +8206,20 @@ function formatNumber(value) {
   return num === 0 ? "0" : num.toLocaleString("id-ID");
 }
 
+/* Samakan penulisan KATEGORI (mis. "r2", "R 2", "R-4", "RODA 4", kosong) jadi "R2"/"R4".
+   Kalau kolom kosong/tidak dikenali, ditebak dari kolom JENIS. */
+function normKategori(kat, jenis) {
+  const k = String(kat || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+  if (k === "R2" || k === "RODA2" || k === "MOTOR" || k === "ROOA2") return "R2";
+  if (k === "R4" || k === "RODA4" || k === "MOBIL" || k === "ROOA4") return "R4";
+  if (/^R?O?D?A?2$/.test(k)) return "R2";
+  if (/^R?O?D?A?4$/.test(k)) return "R4";
+  const j = String(jenis || "").toUpperCase().trim();
+  if (JENIS_BY_KATEGORI.R2.includes(j)) return "R2";
+  if (JENIS_BY_KATEGORI.R4.includes(j)) return "R4";
+  return String(kat || "").trim();
+}
+
 function parseRowsSmart(rows) {
   if (!rows || rows.length < 2) return [];
 
@@ -8196,7 +8245,7 @@ function parseRowsSmart(rows) {
         NOMOR_RANGKA: String(r[7] || "").trim(),
         NOMOR_MESIN: String(r[8] || "").trim(),
         MUTASI: String(r[9] || "").trim(),
-        KATEGORI: String(r[10] || "").trim(),
+        KATEGORI: normKategori(r[10], r[26]),
         RAW_HARGA_MEMO: parseNumber(r[11]),
         HARGA_MEMO: formatNumber(r[11]),
         RAW_HARGA_TERTINGGI: parseNumber(r[12]),
@@ -12283,7 +12332,9 @@ function dkGetData() {
   return allData.filter(row => {
     if (wilayah && allowed && !allowed.includes(row.CABANG)) return false;
     if (cabang && row.CABANG !== cabang) return false;
-    if (kategori && (row.KATEGORI || "").toUpperCase() !== kategori) return false;
+    const kt = (row.KATEGORI || "").toUpperCase();
+    if (kategori === "LAINNYA") { if (kt === "R2" || kt === "R4") return false; }
+    else if (kategori && kt !== kategori) return false;
     return true;
   });
 }
@@ -22700,6 +22751,7 @@ function rkFile(k, f) {
   function ssSelTerjual(item) {
     var r = item.r, i = item.i;
     if (r.hargaTerjual) return '<span class="ss-lock">Rp ' + rp(r.hargaTerjual) + ' <small>&#128274; terkunci</small></span>';
+    if (r.live === false) return '<span class="ha-kosong" title="Arsip closing bulan lama">arsip</span>';
     if (!(ssEdit && ssHO())) return '<span class="ha-kosong">-</span>';
     if (ssBaris === i) {
       var hariIni = new Date(); var iso = hariIni.getFullYear() + "-" + ("0" + (hariIni.getMonth() + 1)).slice(-2) + "-" + ("0" + hariIni.getDate()).slice(-2);
@@ -22745,6 +22797,7 @@ function rkFile(k, f) {
     }).join("");
   }
 
+  var ssAutoInit = false, ssAutoBulan = false;
   function ssMuat() {
     if (ssMuatStatus === "muat") return;
     if (typeof google === "undefined" || !google.script || !google.script.run || typeof google.script.run.fetchSisaStockAyda !== "function") {
@@ -22752,6 +22805,7 @@ function rkFile(k, f) {
       ssPesan("Fungsi fetchSisaStockAyda() belum ada di Apps Script. Tambahkan StockSisa.gs dan deploy ulang.", "error");
       return;
     }
+    if (!ssAutoInit) { ssAutoInit = true; ssAutoBulan = true; $("ssBulan").value = String(new Date().getMonth() + 1); }
     var bulan = parseInt($("ssBulan").value, 10);
     ssMuatStatus = "muat"; ssBaris = -1;
     ssPesan("Mengambil sisa stock dari DATABASE STOCK...", "loading");
@@ -22762,6 +22816,16 @@ function rkFile(k, f) {
         ssIsiCabang(); ssRender();
         var info = "Stock bulan " + ((res && res.periode) || "") + ": " + ssData.length.toLocaleString("id-ID") + " unit.";
         if (res && res.barisAwal > 0) info += " (baris " + res.barisAwal + "\u2013" + res.barisAkhir + " di sheet)";
+        if (res && res.jumlahSold > 0) info += " Termasuk " + res.jumlahSold + " unit terjual (dari sheet SOLD).";
+        /* buka otomatis di bulan berjalan; kalau blok bulan ini belum ada, mundur ke bulan lalu */
+        if (ssAutoBulan && ssData.length === 0) {
+          ssAutoBulan = false;
+          var bm = parseInt($("ssBulan").value, 10) - 1; if (bm < 1) bm = 12;
+          $("ssBulan").value = String(bm);
+          ssMuat();
+          return;
+        }
+        ssAutoBulan = false;
         ssPesan(info, "success");
       })
       .withFailureHandler(function (err) {
@@ -26329,6 +26393,14 @@ var PETA_DATA = {"prov":{"riau":[[[-0.921,101.914],[-0.9826,101.8453],[-0.9341,1
     KEPRI:  { nama: 'KEPRI',  kota: 'Batam',      ll: [1.0456, 104.0305], z: 10 },
     PADANG: { nama: 'PADANG', kota: 'Padang',     ll: [-0.9471, 100.4172], z: 10, kiri: true }
   };
+  var KOTA_LAIN = {
+    ACEH: [['Langsa',4.4683,97.9683],['Lhokseumawe',5.1801,97.1507],['Bireuen',5.2030,96.7010],['Sigli',5.3860,95.9640],['Takengon',4.6280,96.8350],
+           ['Kutacane',3.4970,97.8090],['Blangkejeren',3.9640,97.3400],['Subulussalam',2.6490,98.0000],['Tapaktuan',3.2650,97.1830],['Simeulue',2.4833,96.3833],
+           ['Blangpidie',3.7330,96.8570],['Meulaboh',4.1370,96.1280],['Kuala Simpang',4.2840,98.0410]],
+    SUMUT: [['Pematang Siantar',2.9595,99.0687],['Padang Sidempuan',1.3795,99.2730],['Rantau Prapat',2.1050,99.8330],['Kisaran',2.9830,99.6130],['Binjai',3.6001,98.4854]],
+    RIAU:  [['Pangkalan Kerinci',0.3957,101.8189],['Sorek',0.4500,102.0000],['Air Molek',-0.2900,102.3000],['Pematang Reba',-0.3800,102.4200],
+            ['Duri',1.2333,101.1667],['Dumai',1.6670,101.4500],['Bagan Batu',2.0000,100.7000],['Perawang',0.6433,101.5900],['Flamboyan',0.5200,101.4400]]
+  };
   var TILE = {
     terang: { url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
               atr: 'Tiles &copy; Esri &mdash; Esri, HERE, Garmin, OpenStreetMap' },
@@ -26394,6 +26466,14 @@ var PETA_DATA = {"prov":{"riau":[[[-0.921,101.914],[-0.9826,101.8453],[-0.9341,1
             html: '<span class="pr-titik"></span><span class="pr-nama' + (t.kiri ? ' kiri' : '') + '">' + t.nama + '<small>' + t.kota + '</small></span>' });
           L.marker(t.ll, { icon: ikon, keyboard: false }).on('click', function () { pilih(k); }).addTo(peta);
         });
+        Object.keys(KOTA_LAIN).forEach(function (k) {
+          KOTA_LAIN[k].forEach(function (c) {
+            var ik = L.divIcon({ className: 'pr-kec', iconSize: [0, 0],
+              html: '<span class="pr-dot" style="background:' + WARNA[k.toLowerCase()] + '"></span><span class="pr-lbl">' + c[0] + '</span>' });
+            L.marker([c[1], c[2]], { icon: ik, keyboard: false, title: c[0] }).addTo(peta);
+          });
+        });
+        peta.on('zoomend', function () { box.classList.toggle('pr-zoom-kota', peta.getZoom() >= 8); });
         pas();
         document.querySelectorAll('#petaChip button').forEach(function (b) {
           b.addEventListener('click', function () { pilih(b.getAttribute('data-k')); });
@@ -26411,6 +26491,11 @@ var PETA_DATA = {"prov":{"riau":[[[-0.921,101.914],[-0.9826,101.8453],[-0.9341,1
     document.querySelectorAll('#petaChip button').forEach(function (b) { b.classList.toggle('aktif', b.getAttribute('data-k') === k); });
     if (!peta) return;
     if (k === 'semua' || !KOTA[k]) { peta.flyToBounds(batasAwal, { padding: [14, 14], duration: .8 }); return; }
+    if (KOTA_LAIN[k]) {
+      var titik = [KOTA[k].ll].concat(KOTA_LAIN[k].map(function (c) { return [c[1], c[2]]; }));
+      peta.flyToBounds(L.latLngBounds(titik), { padding: [30, 30], duration: .9, maxZoom: 10 });
+      return;
+    }
     peta.flyTo(KOTA[k].ll, KOTA[k].z, { duration: .9 });
   }
   function mulai() {
